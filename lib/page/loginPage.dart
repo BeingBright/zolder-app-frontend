@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
-import 'package:zolder_app_frontend/service/authService.dart';
+import 'package:zolder_app_frontend/page/locationOverviewPage.dart';
+import 'package:zolder_app_frontend/page/office/rapportPage.dart';
 
-import 'model/UserToken.dart';
+import '../model/UserToken.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,89 +12,109 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<UserToken>? token;
+
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
-  Future<UserToken>? token;
-  var isChecking = false;
+
+  var loggingIn = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Zolder Login"),
+        title: const Text("Zolder Login"),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Container(
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             maxWidth: 350,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,8,0,8),
-                  child: TextField(
-                    autofocus: true,
-                    controller: usernameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Username",
-                    ),
+          child: (loggingIn)
+              ? const CircularProgressIndicator()
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        child: TextField(
+                          autofocus: true,
+                          controller: usernameController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Username",
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        child: TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Password",
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(50),
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        ),
+                        onPressed: () {
+                          // setState(
+                          //   () {
+                          //     loggingIn = true;
+                          //     token = authService().loginUser(
+                          //         usernameController.value.text,
+                          //         passwordController.value.text);
+                          //     if (token != null) {
+                          //       token!.then((tok) => {
+                          //             setState(() {
+                          //               loggingIn = false;
+                          //               Navigator.pushReplacement(
+                          //                   context,
+                          //                   MaterialPageRoute(
+                          //                       builder: (context) =>
+                          //                           moveToPagePerRole(
+                          //                               tok.userType)));
+                          //             })
+                          //           });
+                          //     }
+                          //   },
+                          // );
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      moveToPagePerRole("admin")));
+                        },
+                        child: const Text("Login"),
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,8,0,8),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Password",
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                    padding: const EdgeInsets.fromLTRB(0,8,0,8),
-                  ),
-                  onPressed: () {
-                    
-                    Toast.show(msg)
-                    
-                    setState(
-                      () {
-                        isChecking = true;
-                        token = authService().loginUser(
-                            usernameController.value.text,
-                            passwordController.value.text);
-                      },
-                    );
-                  },
-                  child: Text("Login"),
-                ),
-                (isChecking) ? buildFutureBuilder() : Text(""),
-              ],
-            ),
-          ),
         ),
       ),
     );
   }
 
-  FutureBuilder<UserToken> buildFutureBuilder() {
-    return FutureBuilder<UserToken>(
-      future: token,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Text(snapshot.data!.token);
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
+  Widget moveToPagePerRole(String role) {
+    switch (role) {
+      case "admin":
+        return const LocationOverviewPage();
 
-        return const CircularProgressIndicator();
-      },
-    );
+      case "worker":
+        return const LocationOverviewPage();
+
+      case "office":
+        return const RapportPage();
+
+      default:
+        return const LoginPage();
+    }
   }
 }

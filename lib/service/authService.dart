@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zolder_app_frontend/model/ServerException.dart';
 
-import '../page/model/User.dart';
-import '../page/model/UserToken.dart';
+import '../model/User.dart';
+import '../model/UserToken.dart';
 
 class authService {
+  var sharedPref = SharedPreferences.getInstance();
+
   Future<UserToken> loginUser(String username, String password) async {
     var response = await http.post(
       Uri.parse('http://localhost:3000/zolder/auth'),
@@ -17,24 +20,25 @@ class authService {
       body: jsonEncode(User(null, username,
           sha512.convert(utf8.encode(password)).toString(), null)),
     );
-
+    print( sha512.convert(utf8.encode(password)).toString());
     if (response.statusCode == 200) {
       var token = UserToken.fromJson(jsonDecode(response.body));
-      var pref = await SharedPreferences.getInstance();
-      pref.setString("token", token.token);
-      pref.setString("user", token.user);
-      pref.setString("userType", token.userType);
-      return token;
+      saveToken(token);
+
+      return Future.delayed(
+        const Duration(seconds: 1),
+        () => token,
+      );
     } else {
-      throw Exception("Can not login user");
+      throw Exception(
+          ServerException.fromJson(jsonDecode(response.body)).message);
     }
   }
-}
 
-//final responce = await http.get(
-//         Uri.parse("http://localhost:3000/zolder/auth"));
-//     if (responce.statusCode == 200) {
-//       return UserToken.fromJson(jsonDecode(responce.body));
-//     } else {
-//       throw Exception("Failed to ge");
-//     }
+  void saveToken(UserToken token) async {
+    var pref = await sharedPref;
+    pref.setString("token", token.token);
+    pref.setString("user", token.user);
+    pref.setString("userType", token.userType);
+  }
+}
