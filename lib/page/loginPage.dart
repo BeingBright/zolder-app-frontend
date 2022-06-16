@@ -1,8 +1,5 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:zolder_app_frontend/page/model/User.dart';
+import 'package:toast/toast.dart';
 import 'package:zolder_app_frontend/service/authService.dart';
 
 import 'model/UserToken.dart';
@@ -18,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
   Future<UserToken>? token;
+  var isChecking = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,43 +24,60 @@ class _LoginPageState extends State<LoginPage> {
         title: Text("Zolder Login"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Username",
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: 350,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,8,0,8),
+                  child: TextField(
+                    autofocus: true,
+                    controller: usernameController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Username",
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Password",
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,8,0,8),
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Password",
+                    ),
+                  ),
                 ),
-              ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    padding: const EdgeInsets.fromLTRB(0,8,0,8),
+                  ),
+                  onPressed: () {
+                    
+                    Toast.show(msg)
+                    
+                    setState(
+                      () {
+                        isChecking = true;
+                        token = authService().loginUser(
+                            usernameController.value.text,
+                            passwordController.value.text);
+                      },
+                    );
+                  },
+                  child: Text("Login"),
+                ),
+                (isChecking) ? buildFutureBuilder() : Text(""),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                var password =
-                    sha512.convert(utf8.encode(passwordController.value.text));
-                User user = User(
-                    "", usernameController.value.text, password.toString(), "");
-                token = authService().loginUser(user);
-                print(token);
-              },
-              child: Text("Login"),
-            ),
-            buildFutureBuilder(),
-          ],
+          ),
         ),
       ),
     );
