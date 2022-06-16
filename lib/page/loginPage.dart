@@ -101,8 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              moveToPagePerRole(tok.userType)));
+                          builder: (context) => moveToPagePerRole(tok)));
                 })
               })
           .onError((error, stackTrace) => {
@@ -119,16 +118,16 @@ class _LoginPageState extends State<LoginPage> {
     //             moveToPagePerRole("office")));
   }
 
-  Widget moveToPagePerRole(String role) {
-    switch (role) {
+  Widget moveToPagePerRole(UserToken token) {
+    switch (token.userType) {
       case "admin":
-        return const AdminPage();
+        return AdminPage(token: token);
 
       case "worker":
-        return const WorkerPage();
+        return WorkerPage(token: token);
 
       case "office":
-        return const OfficePage();
+        return OfficePage(token: token);
 
       default:
         return const LoginPage();

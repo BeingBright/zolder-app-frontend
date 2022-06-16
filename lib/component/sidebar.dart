@@ -5,8 +5,9 @@ import '../service/authService.dart';
 
 class Sidebar extends StatelessWidget {
   final String title;
+  final String username;
 
-  Sidebar({Key? key, required this.title}) : super(key: key);
+  Sidebar({Key? key, required this.title, required this.username}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +26,31 @@ class Sidebar extends StatelessWidget {
             decoration: BoxDecoration(
               color: theme.primaryColor,
             ),
-            child: Text(title),
+            child: Column(
+              children: [
+                Text(
+                  title,
+                  style: theme.primaryTextTheme.headline5,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  username,
+                  style: theme.primaryTextTheme.headline6,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
           ListTile(
-            title: const Text('Log out'),
+            title: Row(
+              children: const [
+                Icon(Icons.logout),
+                Spacer(),
+                Text('Log out'),
+                Spacer(),
+                Icon(Icons.logout, color: Colors.transparent),
+              ],
+            ),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacement(context,
