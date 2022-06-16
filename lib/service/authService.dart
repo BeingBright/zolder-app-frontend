@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zolder_app_frontend/config/APIConfig.dart';
 import 'package:zolder_app_frontend/model/ServerException.dart';
 
 import '../model/User.dart';
@@ -14,7 +15,7 @@ class AuthService {
 
   Future<UserToken> loginUser(String username, String password) async {
     var response = await http.post(
-      Uri.parse('http://localhost:3000/zolder/auth'),
+      Uri.parse('${APIConfig.baseURI}/auth'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
