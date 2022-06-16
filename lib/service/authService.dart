@@ -7,8 +7,9 @@ import 'package:zolder_app_frontend/model/ServerException.dart';
 
 import '../model/User.dart';
 import '../model/UserToken.dart';
+import 'exception/InvalidUserEsception.dart';
 
-class authService {
+class AuthService {
   var sharedPref = SharedPreferences.getInstance();
 
   Future<UserToken> loginUser(String username, String password) async {
@@ -20,17 +21,13 @@ class authService {
       body: jsonEncode(User(null, username,
           sha512.convert(utf8.encode(password)).toString(), null)),
     );
-    print( sha512.convert(utf8.encode(password)).toString());
     if (response.statusCode == 200) {
       var token = UserToken.fromJson(jsonDecode(response.body));
       saveToken(token);
 
-      return Future.delayed(
-        const Duration(seconds: 1),
-        () => token,
-      );
+      return token;
     } else {
-      throw Exception(
+      throw InvalidUserException(
           ServerException.fromJson(jsonDecode(response.body)).message);
     }
   }
@@ -40,5 +37,12 @@ class authService {
     pref.setString("token", token.token);
     pref.setString("user", token.user);
     pref.setString("userType", token.userType);
+  }
+
+  void clearToken() async {
+    var pref = await sharedPref;
+    pref.setString("token", "");
+    pref.setString("user", "");
+    pref.setString("userType", "");
   }
 }

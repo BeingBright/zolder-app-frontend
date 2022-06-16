@@ -19,9 +19,9 @@ class ToastHandler {
 
   void forbidden(String message) {}
 
-  void succes(String message)
+  void succes(String message){}
 
   void showToast(String message) {
-    Toast.show(message, duration: 3, gravity: 2, textStyle:)
+    Toast.show(message, duration: 3, gravity: 2);
   }
 }

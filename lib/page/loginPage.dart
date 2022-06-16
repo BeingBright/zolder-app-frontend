@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app_frontend/page/locationOverviewPage.dart';
-import 'package:zolder_app_frontend/page/office/rapportPage.dart';
+import 'package:zolder_app_frontend/page/office_page.dart';
+import 'package:zolder_app_frontend/page/worker_page.dart';
 
 import '../model/UserToken.dart';
+import '../service/authService.dart';
+import 'admin_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,7 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
 
-  var loggingIn = false;
+  var loading = false;
+
+  String exception = "";
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +36,15 @@ class _LoginPageState extends State<LoginPage> {
           constraints: const BoxConstraints(
             maxWidth: 350,
           ),
-          child: (loggingIn)
+          child: (loading)
               ? const CircularProgressIndicator()
               : SingleChildScrollView(
                   child: Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        child: Text(exception),
+                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                         child: TextField(
@@ -46,6 +54,9 @@ class _LoginPageState extends State<LoginPage> {
                             border: OutlineInputBorder(),
                             labelText: "Username",
                           ),
+                          onEditingComplete: () {
+                            submit();
+                          },
                         ),
                       ),
                       Padding(
@@ -57,6 +68,9 @@ class _LoginPageState extends State<LoginPage> {
                             border: OutlineInputBorder(),
                             labelText: "Password",
                           ),
+                          onEditingComplete: () {
+                            submit();
+                          },
                         ),
                       ),
                       ElevatedButton(
@@ -65,32 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                         ),
                         onPressed: () {
-                          // setState(
-                          //   () {
-                          //     loggingIn = true;
-                          //     token = authService().loginUser(
-                          //         usernameController.value.text,
-                          //         passwordController.value.text);
-                          //     if (token != null) {
-                          //       token!.then((tok) => {
-                          //             setState(() {
-                          //               loggingIn = false;
-                          //               Navigator.pushReplacement(
-                          //                   context,
-                          //                   MaterialPageRoute(
-                          //                       builder: (context) =>
-                          //                           moveToPagePerRole(
-                          //                               tok.userType)));
-                          //             })
-                          //           });
-                          //     }
-                          //   },
-                          // );
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      moveToPagePerRole("admin")));
+                          submit();
                         },
                         child: const Text("Login"),
                       ),
@@ -102,16 +91,44 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void submit() {
+    token = AuthService().loginUser(
+        usernameController.value.text, passwordController.value.text);
+    if (token != null) {
+      token!
+          .then((tok) => {
+                setState(() {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              moveToPagePerRole(tok.userType)));
+                })
+              })
+          .onError((error, stackTrace) => {
+                setState(() {
+                  exception = error.toString();
+                })
+              });
+    }
+
+    // Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) =>
+    //             moveToPagePerRole("office")));
+  }
+
   Widget moveToPagePerRole(String role) {
     switch (role) {
       case "admin":
-        return const LocationOverviewPage();
+        return const AdminPage();
 
       case "worker":
-        return const LocationOverviewPage();
+        return const WorkerPage();
 
       case "office":
-        return const RapportPage();
+        return const OfficePage();
 
       default:
         return const LoginPage();
