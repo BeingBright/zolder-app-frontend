@@ -21,7 +21,6 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getUsers();
   }
@@ -48,7 +47,13 @@ class _AdminPageState extends State<AdminPage> {
           : ListView.builder(
               itemCount: _userModel.length,
               itemBuilder: (context, index) {
-                return UserCard(user: _userModel[index]);
+                return UserCard(
+                  user: _userModel[index],
+                  onDelete: (val) {
+                    print(val);
+                    _getUsers();
+                  },
+                );
               },
             ),
       floatingActionButton: (_userModel.isEmpty)
