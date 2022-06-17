@@ -69,7 +69,6 @@ class _UserModalState extends State<UserModal> {
                     dropdownValue);
                 UserService().addUsers(user);
                 Navigator.of(context, rootNavigator: true).pop();
-                setState(() {});
               },
               child: const Text("Add User"))
         ],

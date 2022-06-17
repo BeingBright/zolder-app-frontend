@@ -27,11 +27,13 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   void _getUsers() {
-    UserService().getUsers().then((value) => {
-          setState(() {
-            _userModel = value!;
-          })
-        });
+    Future.delayed(const Duration(seconds: 2), () {
+      UserService().getUsers().then((value) => {
+            setState(() {
+              _userModel = value!;
+            })
+          });
+    });
   }
 
   @override
