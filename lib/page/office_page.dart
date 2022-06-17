@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zolder_app_frontend/model/UserToken.dart';
 
-import '../component/sidebar.dart';
+import '../widget/sidebar.dart';
 
 class OfficePage extends StatefulWidget {
   const OfficePage({Key? key, required this.token}) : super(key: key);

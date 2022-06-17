@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app_frontend/component/sidebar.dart';
+import 'package:zolder_app_frontend/widget/sidebar.dart';
 
 import '../model/UserToken.dart';
 

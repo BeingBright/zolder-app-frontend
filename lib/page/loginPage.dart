@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zolder_app_frontend/page/office_page.dart';
 import 'package:zolder_app_frontend/page/worker_page.dart';
 
@@ -45,34 +46,41 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                         child: Text(exception),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: TextField(
-                          autofocus: true,
-                          controller: usernameController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Username",
+                      AutofillGroup(
+                          child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                            child: TextField(
+                              autofocus: true,
+                              controller: usernameController,
+                              keyboardType: TextInputType.name,
+                              autofillHints: const [AutofillHints.username],
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Username",
+                              ),
+                            ),
                           ),
-                          onEditingComplete: () {
-                            submit();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Password",
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                            child: TextField(
+                              controller: passwordController,
+                              autofillHints: const [AutofillHints.password],
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Password",
+                              ),
+                              onEditingComplete: () {
+                                TextInput.finishAutofillContext();
+                                submit();
+                              },
+                            ),
                           ),
-                          onEditingComplete: () {
-                            submit();
-                          },
-                        ),
-                      ),
+                        ],
+                      )),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),

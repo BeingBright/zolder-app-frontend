@@ -7,7 +7,8 @@ class Sidebar extends StatelessWidget {
   final String title;
   final String username;
 
-  Sidebar({Key? key, required this.title, required this.username}) : super(key: key);
+  Sidebar({Key? key, required this.title, required this.username})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

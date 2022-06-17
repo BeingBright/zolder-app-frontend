@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zolder_app_frontend/config/APIConfig.dart';
 import 'package:zolder_app_frontend/model/ServerException.dart';
 
-import '../model/User.dart';
-import '../model/UserToken.dart';
-import 'exception/InvalidUserEsception.dart';
+import '../../model/User.dart';
+import '../../model/UserToken.dart';
+import '../../service/exception/InvalidUserEsception.dart';
 
 class AuthService {
   var sharedPref = SharedPreferences.getInstance();
