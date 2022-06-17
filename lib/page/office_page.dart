@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app_frontend/model/UserToken.dart';
-
-import '../widget/sidebar.dart';
 
 class OfficePage extends StatefulWidget {
-  const OfficePage({Key? key, required this.token}) : super(key: key);
-
-  final UserToken token;
+  const OfficePage({Key? key}) : super(key: key);
 
   @override
   State<OfficePage> createState() => _OfficePageState();
@@ -17,9 +12,10 @@ class _OfficePageState extends State<OfficePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        title: const Center(
+          child: Text("Office Page"),
+        ),
       ),
-      drawer: Sidebar(title: "Zolder app",username: widget.token.user),
     );
   }
 }

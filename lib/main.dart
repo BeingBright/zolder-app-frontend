@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
-import 'package:zolder_app_frontend/page/loginPage.dart';
+import 'package:zolder_app_frontend/page/login_page.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,21 +16,8 @@ class MyApp extends StatelessWidget {
       title: 'Zolder App',
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
-      theme: ThemeData(
-        colorScheme: const ColorScheme(
-          primary: Colors.blue,
-          onPrimary: Colors.white,
-          error: Colors.white,
-          onError: Colors.red,
-          secondary: Colors.blueGrey,
-          onSecondary: Colors.white70,
-          surface: Colors.blue,
-          onSurface: Colors.black,
-          background: Colors.white,
-          onBackground: Colors.black,
-          brightness: Brightness.light,
-        ),
-      ),
+      theme: ThemeData.light(),
+      // darkTheme: ThemeData.dark(),
     );
   }
 }
