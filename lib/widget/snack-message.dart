@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:zolder_app_frontend/theme/snackbar_type_colors.dart';
 
@@ -71,11 +73,24 @@ class SnackMessage extends StatelessWidget {
         return Icons.warning_outlined;
 
       case SnackType.danger:
-        return Icons.error_outline_outlined;
+        return Icons.dangerous_outlined;
 
       default:
         return Icons.question_mark_outlined;
     }
+  }
+
+  static void show(BuildContext context, SnackType type, String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();;
+    final screenWidth = MediaQuery.of(context).size.width;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        padding: EdgeInsets.zero,
+        width: min(screenWidth * 0.9, 750),
+        content: SnackMessage(
+          message: message,
+          type: type,
+        )));
   }
 }
 

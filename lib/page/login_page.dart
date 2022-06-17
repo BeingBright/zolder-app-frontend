@@ -1,6 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:zolder_app_frontend/model/server_exception.dart';
+import 'package:zolder_app_frontend/model/user.dart';
+import 'package:zolder_app_frontend/service/auth-service.dart';
 import 'package:zolder_app_frontend/widget/snack-message.dart';
 
 import '../model/usertoken.dart';
@@ -60,9 +61,15 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox(
                         height: 70,
                         child: TextFormField(
+                          autofocus: true,
                           controller: usernameController,
                           autofillHints: const [AutofillHints.username],
                           keyboardType: TextInputType.name,
+                          onTap: () => usernameController.selection =
+                              TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset:
+                                      usernameController.value.text.length),
                           obscureText: false,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(),
@@ -84,6 +91,11 @@ class _LoginPageState extends State<LoginPage> {
                           controller: passwordController,
                           autofillHints: const [AutofillHints.password],
                           keyboardType: TextInputType.visiblePassword,
+                          onTap: () => passwordController.selection =
+                              TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset:
+                                      passwordController.value.text.length),
                           obscureText: true,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
@@ -109,16 +121,19 @@ class _LoginPageState extends State<LoginPage> {
                         child: const Text("Log in"),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            final screenWidth =
-                                MediaQuery.of(context).size.width;
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                padding: EdgeInsets.zero,
-                                width: min(screenWidth * 0.9, 750),
-                                content: SnackMessage(
-                                  message: "Message",
-                                  type: SnackType.warning,
-                                )));
+                            var result = AuthService().loginUser(User(
+                                null,
+                                usernameController.text,
+                                AuthService.encrypt(passwordController.text),
+                                null));
+                            result.catchError((error, stackTrace) => {
+                                  SnackMessage.show(context, SnackType.danger,
+                                      (error as ServerException).message)
+                                });
+                            result.then((value) => {
+                                  SnackMessage.show(
+                                      context, SnackType.success, "Loggin In")
+                                });
                           }
                         },
                       ),
