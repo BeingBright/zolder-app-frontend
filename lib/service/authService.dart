@@ -13,20 +13,25 @@ import '../../service/exception/InvalidUserEsception.dart';
 class AuthService {
   var sharedPref = SharedPreferences.getInstance();
 
+  static UserToken? token;
+
+  String encrypt(String msg) {
+    return sha512.convert(utf8.encode(msg)).toString();
+  }
+
   Future<UserToken> loginUser(String username, String password) async {
     var response = await http.post(
       Uri.parse('${APIConfig.baseURI}/auth'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(User(null, username,
-          sha512.convert(utf8.encode(password)).toString(), null)),
+      body: jsonEncode(User(null, username, encrypt(password), null)),
     );
     if (response.statusCode == 200) {
-      var token = UserToken.fromJson(jsonDecode(response.body));
-      saveToken(token);
+      token = UserToken.fromJson(jsonDecode(response.body));
+      saveToken(token!);
 
-      return token;
+      return token!;
     } else {
       throw InvalidUserException(
           ServerException.fromJson(jsonDecode(response.body)).message);
@@ -41,6 +46,7 @@ class AuthService {
   }
 
   void clearToken() async {
+    token = null;
     var pref = await sharedPref;
     pref.setString("token", "");
     pref.setString("user", "");

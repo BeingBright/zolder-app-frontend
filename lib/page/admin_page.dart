@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zolder_app_frontend/service/userService.dart';
+import 'package:zolder_app_frontend/widget/user-modal.dart';
+import 'package:zolder_app_frontend/widget/user_card.dart';
 
 import '../model/User.dart';
 import '../model/UserToken.dart';
@@ -24,10 +26,12 @@ class _AdminPageState extends State<AdminPage> {
     _getUsers();
   }
 
-  void _getUsers() async {
-    print(widget.token.token);
-    _userModel = (await UserService().getUsers(widget.token.token))!;
-    Future.delayed(const Duration(seconds: 2)).then((value) => setState(() {}));
+  void _getUsers() {
+    UserService().getUsers().then((value) => {
+          setState(() {
+            _userModel = value!;
+          })
+        });
   }
 
   @override
@@ -38,14 +42,22 @@ class _AdminPageState extends State<AdminPage> {
       ),
       drawer: Sidebar(title: "Zolder app", username: widget.token.user),
       body: (_userModel.isEmpty)
-          ? Center(child: const CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _userModel.length,
               itemBuilder: (context, index) {
-                return Card(
-                  child: Text(_userModel[index].username!),
-                );
+                return UserCard(user: _userModel[index]);
               },
+            ),
+      floatingActionButton: (_userModel.isEmpty)
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                var dialog = showDialog(
+                    context: context, builder: (context) => UserModal());
+                dialog.then((value) => {_getUsers()});
+              },
+              child: const Icon(Icons.add),
             ),
     );
   }
