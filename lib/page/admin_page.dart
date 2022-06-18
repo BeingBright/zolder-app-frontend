@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app_frontend/page/admin/user_page.dart';
+import 'package:zolder_app_frontend/page/location_page.dart';
+import 'package:zolder_app_frontend/page/user_page.dart';
 import 'package:zolder_app_frontend/widget/sidebar.dart';
 
 const String userRoute = "Users";
@@ -77,10 +78,10 @@ class _AdminPageState extends State<AdminPage> {
         page = UserOverviewPage();
         break;
       case locationRoute:
-        page = Text("data");
+        page = LocationPage();
         break;
       default:
-        page = UserOverviewPage();
+        page = Text("OOPS");
         break;
     }
 

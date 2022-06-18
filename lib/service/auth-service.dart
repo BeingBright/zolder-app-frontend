@@ -29,6 +29,12 @@ class AuthService {
     }
   }
 
+  Future<UserToken> getToken() async {
+    var pref = await sharedPref;
+    return UserToken(pref.getString("token")!, pref.getString("user")!,
+        pref.getString("userType")!);
+  }
+
   static String encrypt(String msg) {
     return sha512.convert(utf8.encode(msg)).toString();
   }
