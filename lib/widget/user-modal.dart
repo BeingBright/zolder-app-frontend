@@ -21,12 +21,28 @@ class _UserModalState extends State<UserModal> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Add User"),
-      contentPadding: EdgeInsets.all(25),
+      title: const Text("Add User"),
+      actions: [
+        TextButton(
+            onPressed: () {
+              User user = User(null, usernameController.text,
+                  AuthService.encrypt(passwordController.text), dropdownValue);
+              UserService().addUsers(user).then((value) {
+                SnackMessage.show(
+                    context, SnackType.success, "User: '${user.username}'");
+              }).onError((error, stackTrace) {
+                SnackMessage.show(context, SnackType.danger, error.toString());
+              });
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            child: Text("Add User"))
+      ],
+      contentPadding: const EdgeInsets.all(30),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
+            autofocus: true,
             obscureText: false,
             controller: usernameController,
             decoration: const InputDecoration(
@@ -45,40 +61,22 @@ class _UserModalState extends State<UserModal> {
             onEditingComplete: () {},
           ),
           DropdownButton(
-              value: dropdownValue,
-              items: <String>['office', 'worker', 'admin']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? val) {
-                setState(() {
-                  dropdownValue = val!;
-                });
-              }),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              ),
-              onPressed: () {
-                User user = User(
-                    null,
-                    usernameController.text,
-                    AuthService.encrypt(passwordController.text),
-                    dropdownValue);
-                UserService().addUsers(user).then((value) {
-                  SnackMessage.show(
-                      context, SnackType.success, "User: '${user.username}'");
-                }).onError((error, stackTrace) {
-                  SnackMessage.show(
-                      context, SnackType.danger, error.toString());
-                });
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-              child: const Text("Add User"))
+            isExpanded: true,
+            value: dropdownValue,
+            items: <String>['office', 'worker', 'admin']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            hint: Text("User Role"),
+            onChanged: (String? val) {
+              setState(() {
+                dropdownValue = val!;
+              });
+            },
+          ),
         ],
       ),
     );
