@@ -37,6 +37,7 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   provider: ^5.0.0
   get_it: ^7.2.0
+  stomp_dart_client: ^0.4.4
 
 
   # The following adds the Cupertino Icons font to your application.
