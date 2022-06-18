@@ -25,48 +25,51 @@ class _UserOverviewPageState extends State<UserOverviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: ListView(
-          children: [
-            const UserTitle(),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: _userModel.length,
-              itemBuilder: (context, index) => UserCard(
-                  user: _userModel[index],
-                  onDelete: (user) {
-                    _removeUser(context, user);
-                  },
-                  onModify: (user) {
-                    SnackMessage.show(context, SnackType.info, "TO DO");
-                  }),
-            ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      _getUsers();
+    return Scaffold(
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ListView(
+            children: [
+              const UserTitle(),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: _userModel.length,
+                itemBuilder: (context, index) => UserCard(
+                    user: _userModel[index],
+                    onDelete: (user) {
+                      _removeUser(context, user);
                     },
-                    icon: Icon(Icons.refresh)),
-                Spacer(),
-                ElevatedButton(
-                    onPressed: () {
-                      var dialog = showDialog(
-                          context: context, builder: (context) => UserModal());
-                      dialog.then((value) {
-                        Future.delayed(
-                          Duration(seconds: 1),
-                          () => _getUsers(),
-                        );
-                      });
-                    },
-                    child: Icon(Icons.add))
-              ],
-            )
-          ],
+                    onModify: (user) {
+                      SnackMessage.show(context, SnackType.info, "TO DO");
+                    }),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        _getUsers();
+                      },
+                      icon: Icon(Icons.refresh)),
+                  Spacer(),
+                ],
+              )
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          var dialog =
+              showDialog(context: context, builder: (context) => UserModal());
+          dialog.then((value) {
+            Future.delayed(
+              Duration(seconds: 1),
+              () => _getUsers(),
+            );
+          });
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

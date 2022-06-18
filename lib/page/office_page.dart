@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../model/usertoken.dart';
+import '../service/auth-service.dart';
 import '../widget/sidebar.dart';
 
 const String locationRoute = "Locations";
@@ -15,16 +17,23 @@ class _OfficePageState extends State<OfficePage> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   String currentPage = locationRoute;
+  UserToken userToken = UserToken.empty();
 
   @override
   Widget build(BuildContext context) {
+    AuthService().getToken().then((value) {
+      setState(() {
+        userToken = value;
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(
-        title:  Center(
+        title: Center(
           child: Text(currentPage),
         ),
       ),
-      drawer: Sidebar(title: "Office Page", username: "username", buttons: [
+      drawer: Sidebar(title: userToken.user, username: "Office Page", buttons: [
         ListTile(
             title: Row(
               children: const [

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:zolder_app_frontend/model/usertoken.dart';
 import 'package:zolder_app_frontend/page/location_page.dart';
 import 'package:zolder_app_frontend/page/user_page.dart';
+import 'package:zolder_app_frontend/service/auth-service.dart';
 import 'package:zolder_app_frontend/widget/sidebar.dart';
 
 const String userRoute = "Users";
@@ -18,15 +20,23 @@ class _AdminPageState extends State<AdminPage> {
 
   String currentPage = userRoute;
 
+  UserToken userToken = UserToken.empty();
+
   @override
   Widget build(BuildContext context) {
+    AuthService().getToken().then((value) {
+      setState(() {
+        userToken = value;
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(currentPage),
         ),
       ),
-      drawer: Sidebar(title: "Admin Page", username: "username", buttons: [
+      drawer: Sidebar(title: userToken.user, username: "Admin Page", buttons: [
         ListTile(
           title: Row(
             children: const [
