@@ -18,6 +18,6 @@ class ServerException {
 
   @override
   String toString() {
-    return 'ServerException{message: $message, status: $status, statusCode: $statusCode}';
+    return message;
   }
 }

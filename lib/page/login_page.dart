@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app_frontend/model/server_exception.dart';
 import 'package:zolder_app_frontend/model/user.dart';
 import 'package:zolder_app_frontend/service/auth-service.dart';
 import 'package:zolder_app_frontend/widget/snack-message.dart';
@@ -107,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                             return null;
                           },
+                          onEditingComplete: () => submitForm(context),
                           expands: false,
                         ),
                       ),
@@ -120,21 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: const Text("Log in"),
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            var result = AuthService().loginUser(User(
-                                null,
-                                usernameController.text,
-                                AuthService.encrypt(passwordController.text),
-                                null));
-                            result.catchError((error, stackTrace) => {
-                                  SnackMessage.show(context, SnackType.danger,
-                                      (error as ServerException).message)
-                                });
-                            result.then((value) => {
-                                  SnackMessage.show(
-                                      context, SnackType.success, "Loggin In")
-                                });
-                          }
+                          submitForm(context);
                         },
                       ),
                     )
@@ -146,6 +132,23 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void submitForm(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      var result = AuthService().loginUser(User(null, usernameController.text,
+          AuthService.encrypt(passwordController.text), null));
+      result.catchError((error, stackTrace) {
+        SnackMessage.show(context, SnackType.danger, error.toString());
+        return UserToken.empty();
+      });
+      result.then((value) {
+        SnackMessage.show(context, SnackType.success, "Loggin In");
+
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => moveToPagePerRole(value)));
+      });
+    }
   }
 
   Widget moveToPagePerRole(UserToken token) {
