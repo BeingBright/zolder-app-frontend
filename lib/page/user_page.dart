@@ -51,7 +51,7 @@ class _UserOverviewPageState extends State<UserOverviewPage> {
                     },
                     icon: Icon(Icons.refresh)),
                 Spacer(),
-                ElevatedButton( 
+                ElevatedButton(
                     onPressed: () {
                       var dialog = showDialog(
                           context: context, builder: (context) => UserModal());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widget/sidebar.dart';
+import 'location_page.dart';
 
 const String locationRoute = "Locations";
 
@@ -59,7 +60,7 @@ class _WorkerPageState extends State<WorkerPage> {
     late Widget page;
     switch (settings.name) {
       case locationRoute:
-        page = Text("locaion");
+        page = LocationPage();
         break;
       default:
         page = Text("OOPS");

@@ -13,10 +13,9 @@ class SnackMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(
-        maxHeight: 75,
-      ),
+      padding: EdgeInsets.zero,
+      constraints: BoxConstraints(
+          maxHeight: 75, maxWidth: MediaQuery.of(context).size.width),
       child: Row(
         children: [
           Container(
@@ -31,12 +30,13 @@ class SnackMessage extends StatelessWidget {
               color: getColor(context, type),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(message),
-            ],
-          )
+          Flexible(
+            child: Text(
+              message,
+              overflow: TextOverflow.clip,
+              softWrap: true,
+            ),
+          ),
         ],
       ),
     );
@@ -81,7 +81,8 @@ class SnackMessage extends StatelessWidget {
   }
 
   static void show(BuildContext context, SnackType type, String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();;
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ;
     final screenWidth = MediaQuery.of(context).size.width;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,

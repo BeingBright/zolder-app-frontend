@@ -72,6 +72,9 @@ class _UserModalState extends State<UserModal> {
                 UserService().addUsers(user).then((value) {
                   SnackMessage.show(
                       context, SnackType.success, "User: '${user.username}'");
+                }).onError((error, stackTrace) {
+                  SnackMessage.show(
+                      context, SnackType.danger, error.toString());
                 });
                 Navigator.of(context, rootNavigator: true).pop();
               },
