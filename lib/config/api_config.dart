@@ -1,5 +1,5 @@
 class APIConfig {
-  static const baseURI = "http://localhost:3000/zolder";
+  static const baseURI = "http://localhost:7002/zolder";
   static const user = "$baseURI/user";
   static const location = "$baseURI/location";
   static const auth = "$baseURI/auth";
