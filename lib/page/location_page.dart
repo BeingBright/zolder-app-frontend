@@ -46,7 +46,7 @@ class _LocationPageState extends State<LocationPage> {
   _getLocations() {
     LocationService().getLocations().then((value) {
       setState(() {
-        _locationModel = value!;
+        _locationModel = value;
       });
     });
   }
