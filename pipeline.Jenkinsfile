@@ -17,13 +17,13 @@ pipeline {
                 sh "flutter build web"
             }
         }
-        stage('Saving Results') 
-        {
-            steps {
-                // junit 'target/surefire-reports/TEST-*.xml'
-                // archiveArtifacts 'target/*.jar'
-            }
-        }
+        // stage('Saving Results') 
+        // {
+        //     steps {
+        //          junit 'target/surefire-reports/TEST-*.xml'
+        //          archiveArtifacts 'target/*.jar'
+        //     }
+        // }
         // stage('Deploy') 
         // {
         //     steps {
