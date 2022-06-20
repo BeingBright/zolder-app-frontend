@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app/models/usertoken.dart';
+import 'package:zolder_app/models/user_token.dart';
 
 class UserTokenModel extends ChangeNotifier {
   UserToken userToken = UserToken.empty();

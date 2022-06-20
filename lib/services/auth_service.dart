@@ -5,7 +5,7 @@ import 'package:zolder_app/configuration/api_configuration.dart';
 import 'package:zolder_app/models/server_exception.dart';
 
 import '../models/user.dart';
-import '../models/usertoken.dart';
+import '../models/user_token.dart';
 
 class AuthService {
   static final _instance = AuthService._newInstance();

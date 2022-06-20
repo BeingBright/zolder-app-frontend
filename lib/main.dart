@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/models/usertoken_model.dart';
+import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/views/admin_page.dart';
 import 'package:zolder_app/views/login_page.dart';
 import 'package:zolder_app/views/office_page.dart';

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
-import 'package:zolder_app/models/usertoken.dart';
-import 'package:zolder_app/models/usertoken_model.dart';
+import 'package:zolder_app/models/user_token.dart';
+import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/services/auth_service.dart';
 
 class AuthCommand with provider {
@@ -18,7 +18,7 @@ class AuthCommand with provider {
 
   Future<UserToken> loginUser(
       BuildContext context, String username, String password) {
-    Future<UserToken> newToken = authService.loginUser(username, password);
+    Future<UserToken> newToken = authService.loginUser(username, encrypt(password));
     newToken.then(
       (newToken) => getProvided<UserTokenModel>(context).setToken(newToken),
     );
