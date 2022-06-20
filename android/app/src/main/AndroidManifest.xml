@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nl.brighton.zolder.zolder_app_frontend">
+    package="nl.brighton.zolder_app">
    <application
-        android:label="zolder_app_frontend"
+        android:label="zolder_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

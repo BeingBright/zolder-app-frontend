@@ -1,4 +1,4 @@
-package nl.brighton.zolder.zolder_app_frontend;
+package nl.brighton.zolder_app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

@@ -1,11 +1,11 @@
 {
-    "name": "zolder_app_frontend",
-    "short_name": "zolder_app_frontend",
+    "name": "zolder_app",
+    "short_name": "zolder_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Zolder Frontend Flutter App",
+    "description": "De Zolder App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
-import 'package:zolder_app_frontend/page/login_page.dart';
+import 'package:zolder_app/views/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +10,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ToastContext().init(context);
     return MaterialApp(
-      title: 'Zolder App',
+      title: 'Zolder',
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      themeMode: ThemeMode.system,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
+      home: HomePage(),
     );
   }
 }
