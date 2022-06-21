@@ -12,53 +12,60 @@ class Sidebar extends StatelessWidget {
     var theme = Theme.of(context);
 
     return Drawer(
-      child: SingleChildScrollView(
-          child: Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: theme.primaryColor,
-            ),
-            child: Column(
-              children: [
-                Text(
-                  Provider.of<UserTokenModel>(context).userToken.user,
-                  style: theme.primaryTextTheme.headline4,
-                  textAlign: TextAlign.center,
+          SingleChildScrollView(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: theme.primaryColor,
                 ),
-                Text(
-                  Provider.of<UserTokenModel>(context)
-                      .userToken
-                      .userType
-                      .toLowerCase(),
-                  textAlign: TextAlign.center,
-                  style: theme.primaryTextTheme.headline6,
-                ),
-                const Spacer(),
-                const Divider(),
-                ListTile(
-                  title: Row(
-                    children: const [
-                      Icon(Icons.logout),
-                      Spacer(),
-                      Text("Log out"),
-                      Spacer(),
-                      Icon(
-                        Icons.logout,
-                        color: Colors.transparent,
+                child: Column(
+                  children: [
+                    Text(
+                      Provider.of<UserTokenModel>(context).userToken.user,
+                      style: theme.primaryTextTheme.headline4,
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      Provider.of<UserTokenModel>(context)
+                          .userToken
+                          .userType
+                          .toLowerCase(),
+                      textAlign: TextAlign.center,
+                      style: theme.primaryTextTheme.headline6,
+                    ),
+                    const Spacer(),
+                    const Divider(),
+                    ListTile(
+                      title: Row(
+                        children: const [
+                          Icon(Icons.logout),
+                          Spacer(),
+                          Text("Log out"),
+                          Spacer(),
+                          Icon(
+                            Icons.logout,
+                            color: Colors.transparent,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  onTap: () {
-                    AuthCommand().logoutUser(context);
-                  },
-                )
-              ],
-            ),
-          )
+                      onTap: () {
+                        AuthCommand().logoutUser(context);
+                      },
+                    )
+                  ],
+                ),
+              )
+            ],
+          )),
         ],
-      )),
+      ),
     );
   }
 }

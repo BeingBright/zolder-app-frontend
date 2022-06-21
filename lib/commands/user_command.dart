@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
 import 'package:zolder_app/models/user.dart';
 import 'package:zolder_app/models/user_model.dart';
@@ -21,7 +22,14 @@ class UserCommand with provider {
 
   Future removeUsers(BuildContext context, User toRemove) {
     Future res = userService.removeUser(toRemove);
-    res.then((_) => getUsers(context));
+    res.then((_) {
+      getUsers(context);
+      Toast.show(
+        "User '${toRemove.username}' ${(toRemove.isActive) ? "Enabled" : "Disabled"}",
+        duration: Toast.lengthLong,
+        gravity: Toast.top,
+      );
+    });
     return res;
   }
 }
