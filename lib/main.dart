@@ -17,7 +17,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
+ 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,13 +36,13 @@ class MyApp extends StatelessWidget {
 
   Widget getPage(String type) {
     switch (type) {
-      case "admin":
+      case "ADMIN":
         return const AdminPage();
 
-      case "worker":
+      case "WORKER":
         return const WorkerPage();
 
-      case "office":
+      case "OFFICE":
         return const OfficePage();
 
       default:

@@ -3,20 +3,23 @@ class User {
   String? username;
   String? password;
   String? type;
+  bool isActive = true;
 
-  User(this.id, this.username, this.password, this.type);
+  User(this.id, this.username, this.password, this.type, this.isActive);
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         username = json['username'],
         password = json['password'],
-        type = json['type'];
+        type = json['type'],
+        isActive = json['isActive'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': username,
         'password': password,
         'type': type,
+        'isActive': isActive
       };
 
   @override

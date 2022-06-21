@@ -42,9 +42,8 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height
-          ),
+          constraints:
+              BoxConstraints(minHeight: MediaQuery.of(context).size.height),
           child: Padding(
             padding: EdgeInsets.all(_mainPadding),
             child: Center(
@@ -99,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.all(_elementPadding),
                 child: TextFormField(
+                  textInputAction: TextInputAction.next,
                   autofocus: true,
                   controller: _usernameController,
                   autofillHints: const [AutofillHints.username],
@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.all(_elementPadding),
                 child: TextFormField(
+                  textInputAction: TextInputAction.done,
                   controller: _passwordController,
                   autofillHints: const [AutofillHints.password],
                   obscureText: true,

@@ -9,7 +9,7 @@ class UserToken {
 
   UserToken.fromJson(Map<String, dynamic> json)
       : token = json['token'],
-        user = json['user'],
+        user = json['username'],
         userType = json['userType'];
 
   bool isEmpty() => token == "" && user == "" && userType == "";
