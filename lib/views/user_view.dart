@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zolder_app/components/user_card.dart';
+import 'package:zolder_app/components/user_modal.dart';
 
 import '../commands/user_command.dart';
 import '../components/sidebar.dart';
@@ -28,7 +29,11 @@ class _UserViewState extends State<UserView> {
       drawer: const Sidebar(),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            UserCommand().getUsers(context);
+            var addUserModal =
+                showDialog(context: context, builder: (context) => UserModal());
+            addUserModal.then((value) {
+              print(value);
+            });
           },
           child: const Icon(Icons.add)),
       body: Padding(
@@ -38,11 +43,10 @@ class _UserViewState extends State<UserView> {
             return GridView.builder(
               itemCount: userModel.users.length,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 350,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                mainAxisExtent: 150
-              ),
+                  maxCrossAxisExtent: 350,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  mainAxisExtent: 150),
               itemBuilder: (BuildContext ctx, index) {
                 return UserCard(user: userModel.users[index]);
               },

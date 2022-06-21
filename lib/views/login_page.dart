@@ -128,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(),
                     labelText: "Password",
                   ),
+                  onEditingComplete: () => loginUser(),
                 ),
               ),
             ],
@@ -146,17 +147,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: EdgeInsets.all(_elementPadding),
           child: ElevatedButton(
-            onPressed: () => AuthCommand()
-                .loginUser(
-                    context, _usernameController.text, _passwordController.text)
-                .onError((error, stackTrace) {
-              setState(() {
-                _errorMessage = "Invalid User";
-                Toast.show(_errorMessage,
-                    duration: Toast.lengthLong, gravity: Toast.top);
-              });
-              return UserToken.empty();
-            }),
+            onPressed: () => loginUser(),
             child: Padding(
               padding: EdgeInsets.all(_elementPadding),
               child: const Text("Log in"),
@@ -165,5 +156,18 @@ class _LoginPageState extends State<LoginPage> {
         )
       ],
     );
+  }
+
+  void loginUser() {
+    AuthCommand()
+        .loginUser(context, _usernameController.text, _passwordController.text)
+        .onError((error, stackTrace) {
+      setState(() {
+        _errorMessage = "Invalid User";
+        Toast.show(_errorMessage,
+            duration: Toast.lengthLong, gravity: Toast.top);
+      });
+      return UserToken.empty();
+    });
   }
 }

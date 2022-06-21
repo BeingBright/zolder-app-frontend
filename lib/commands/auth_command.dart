@@ -35,9 +35,9 @@ class AuthCommand with provider {
   }
 
   logoutUser(BuildContext context) {
+    getProvided<UserTokenModel>(context).removeToken();
     authService.logoutUser().then(
       (response) {
-        getProvided<UserTokenModel>(context).removeToken();
         Toast.show(
           "Logged Out",
           duration: Toast.lengthLong,
