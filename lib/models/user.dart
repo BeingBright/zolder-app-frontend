@@ -12,14 +12,14 @@ class User {
         username = json['username'],
         password = json['password'],
         type = json['type'],
-        isActive = json['isActive'];
+        isActive = json['active'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': username,
         'password': password,
         'type': type,
-        'isActive': isActive
+        'active': isActive
       };
 
   @override

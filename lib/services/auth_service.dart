@@ -14,12 +14,15 @@ class AuthService {
 
   AuthService._newInstance();
 
+  UserToken token = UserToken.empty();
+
   Future<UserToken> loginUser(String username, String password) async {
     var response = await http.post(Uri.parse(APIConfiguration.auth),
         headers: APIConfiguration.baseHeader,
         body: jsonEncode(User(null, username, password, null, true)));
     if (response.statusCode == 200) {
-      return UserToken.fromJson(jsonDecode(response.body));
+      token = UserToken.fromJson(jsonDecode(response.body));
+      return token;
     }
     throw ServerException.fromJson(jsonDecode(response.body));
   }

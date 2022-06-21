@@ -6,10 +6,13 @@ import 'package:zolder_app/views/login_page.dart';
 import 'package:zolder_app/views/office_page.dart';
 import 'package:zolder_app/views/worker_page.dart';
 
+import 'models/user_model.dart';
+
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserTokenModel()),
+      ChangeNotifierProvider(create: (context) => UserModel())
     ],
     child: const MyApp(),
   ));
