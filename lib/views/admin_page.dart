@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zolder_app/commands/sidebar.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -12,8 +13,10 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admin Page"),
+        title: const Text("Users"),
       ),
+      drawer: const Sidebar(),
+
     );
   }
 }
