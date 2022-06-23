@@ -15,14 +15,14 @@ import 'package:zolder_app/views/worker_page.dart';
 
 //
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => UserTokenModel()),
-      ChangeNotifierProvider(create: (context) => UserModel())
-    ],
-    child: const MyApp(),
-  ));
-  // connectToStomp();
+  // runApp(MultiProvider(
+  //   providers: [
+  //     ChangeNotifierProvider(create: (context) => UserTokenModel()),
+  //     ChangeNotifierProvider(create: (context) => UserModel())
+  //   ],
+  //   child: const MyApp(),
+  // ));
+  connectToStomp();
 }
 
 class MyApp extends StatelessWidget {
@@ -70,22 +70,22 @@ void onConnect(StompFrame frame) {
     },
   );
 
-  Timer(Duration(seconds: 5), () {
+  Timer(Duration(seconds: 10), () {
     stompClient.send(destination: "/app/hello");
   });
 }
 
 final stompClient = StompClient(
-  config: StompConfig.SockJS(
-      url: "http://localhost:7000/zolder/ws",
+  config: StompConfig(
+      url: "ws://localhost:7000/zolder/ws",
       onConnect: onConnect,
       onDebugMessage: print,
       onWebSocketError: (dynamic error) => print(error.toString()),
       stompConnectHeaders: {
-        'Authorization': "28793f54-e7ed-4793-ab6c-e9f4aa9091fc"
+        'Authorization': "df53531c-2585-4b45-aef2-9423783878ff"
       },
       webSocketConnectHeaders: {
-        'Authorization': "28793f54-e7ed-4793-ab6c-e9f4aa9091fc"
+        'Authorization': "df53531c-2585-4b45-aef2-9423783878ff"
       }),
 );
 

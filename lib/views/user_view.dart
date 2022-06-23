@@ -29,10 +29,12 @@ class _UserViewState extends State<UserView> {
       drawer: const Sidebar(),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
+            UserCommand().getUsers(context);
             var addUserModal =
                 showDialog(context: context, builder: (context) => UserModal());
             addUserModal.then((value) {
               print(value);
+
             });
           },
           child: const Icon(Icons.add)),

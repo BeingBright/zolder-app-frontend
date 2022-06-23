@@ -2,29 +2,29 @@ class User {
   String? id;
   String? username;
   String? password;
-  String? type;
+  String? role;
   bool isActive = true;
 
-  User(this.id, this.username, this.password, this.type, this.isActive);
+  User(this.id, this.username, this.password, this.role, this.isActive);
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         username = json['username'],
         password = json['password'],
-        type = json['type'],
+        role = json['role'],
         isActive = json['active'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': username,
         'password': password,
-        'type': type,
+        'role': role,
         'active': isActive
       };
 
   @override
   String toString() {
-    return 'User{id: $id, username: $username, password: $password, type: $type}';
+    return 'User{id: $id, username: $username, password: $password, type: $role}';
   }
 
   @override
@@ -34,8 +34,8 @@ class User {
           runtimeType == other.runtimeType &&
           id == other.id &&
           username == other.username &&
-          type == other.type;
+          role == other.role;
 
   @override
-  int get hashCode => id.hashCode ^ username.hashCode ^ type.hashCode;
+  int get hashCode => id.hashCode ^ username.hashCode ^ role.hashCode;
 }

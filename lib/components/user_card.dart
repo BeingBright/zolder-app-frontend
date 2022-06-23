@@ -23,7 +23,7 @@ class UserCard extends StatelessWidget {
             style: theme.textTheme.headline4,
           ),
           Text(
-            user.type!,
+            user.role!,
             style: theme.textTheme.bodyMedium,
           ),
           Row(
