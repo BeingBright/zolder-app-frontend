@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../components/sidebar.dart';
+
 class OfficePage extends StatefulWidget {
   const OfficePage({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class _OfficePageState extends State<OfficePage> {
       appBar: AppBar(
         title: const Text("Office Page"),
       ),
+      drawer: const Sidebar(),
     );
   }
 }
