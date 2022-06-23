@@ -1,28 +1,28 @@
 class UserToken {
   String token;
   String user;
-  String userType;
+  String role;
 
-  UserToken(this.token, this.user, this.userType);
+  UserToken(this.token, this.user, this.role);
 
   static UserToken empty() => UserToken("", "", "");
 
   UserToken.fromJson(Map<String, dynamic> json)
       : token = json['token'],
         user = json['username'],
-        userType = json['userType'];
+        role = json['role'];
 
-  bool isEmpty() => token == "" && user == "" && userType == "";
+  bool isEmpty() => token == "" && user == "" && role == "";
 
   Map<String, dynamic> toJson() => {
         'token': token,
         'user': user,
-        'userType': userType,
+        'userType': role,
       };
 
   @override
   String toString() {
-    return 'UserToken{token: $token, user: $user, userType: $userType}';
+    return 'UserToken{token: $token, user: $user, userType: $role}';
   }
 
   @override
@@ -32,8 +32,8 @@ class UserToken {
           runtimeType == other.runtimeType &&
           token == other.token &&
           user == other.user &&
-          userType == other.userType;
+          role == other.role;
 
   @override
-  int get hashCode => token.hashCode ^ user.hashCode ^ userType.hashCode;
+  int get hashCode => token.hashCode ^ user.hashCode ^ role.hashCode;
 }

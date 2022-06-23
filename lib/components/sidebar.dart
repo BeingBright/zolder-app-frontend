@@ -35,7 +35,7 @@ class Sidebar extends StatelessWidget {
                     Text(
                       Provider.of<UserTokenModel>(context)
                           .userToken
-                          .userType
+                          .role
                           .toLowerCase(),
                       textAlign: TextAlign.center,
                       style: theme.primaryTextTheme.headline6,

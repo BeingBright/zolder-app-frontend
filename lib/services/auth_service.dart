@@ -17,7 +17,7 @@ class AuthService {
   UserToken token = UserToken.empty();
 
   Future<UserToken> loginUser(String username, String password) async {
-    var response = await http.post(Uri.parse(APIConfiguration.auth),
+    var response = await http.post(Uri.parse('${APIConfiguration.auth}/login'),
         headers: APIConfiguration.baseHeader,
         body: jsonEncode(User(null, username, password, null, true)));
     if (response.statusCode == 200) {
@@ -27,7 +27,16 @@ class AuthService {
     throw ServerException.fromJson(jsonDecode(response.body));
   }
 
-  Future logoutUser() {
-    return Future.delayed(const Duration(seconds: 2));
+  Future<UserToken> logoutUser() async {
+    var response = await http.post(
+      Uri.parse('${APIConfiguration.auth}/logout'),
+      headers: APIConfiguration.getHeadersWithToken(token.token),
+    );
+    if (response.statusCode == 200) {
+      token = UserToken.fromJson(jsonDecode(response.body));
+      return UserToken.empty();
+
+    }
+    throw ServerException.fromJson(jsonDecode(response.body));
   }
 }

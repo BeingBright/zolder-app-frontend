@@ -5,13 +5,13 @@ class APIConfiguration {
   static const String auth = "$baseURI/auth";
   static const String locationAuth = "$location/audit";
 
-  static const Map<String, String> baseHeader = <String, String>{
+  static Map<String, String> baseHeader = <String, String>{
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
   static Map<String, String> getHeadersWithToken(String token) {
     Map<String, String> headers = baseHeader;
-    headers.putIfAbsent("token", () => token);
+    headers.putIfAbsent("authorization", () => token);
     return headers;
   }
 }
