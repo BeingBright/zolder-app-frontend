@@ -7,7 +7,7 @@ pipeline {
             steps {
                 echo 'Pulling Code...'
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NODE_NAME} and JOB ${env.JOB_NAME}"
-              git branch: 'development', url: 'https://github.com/BeingBright/zolder-app-frontend.git'
+                git branch: 'main', url: 'https://github.com/BeingBright/zolder-app-frontend.git'
             }
         }
         stage('Build') 
