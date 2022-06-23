@@ -1,28 +1,24 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:toast/toast.dart';
-import 'package:zolder_app/models/user_model.dart';
 import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/views/admin_page.dart';
 import 'package:zolder_app/views/login_page.dart';
 import 'package:zolder_app/views/office_page.dart';
 import 'package:zolder_app/views/worker_page.dart';
 
+import 'models/user_model.dart';
+
 //
 void main() {
-  // runApp(MultiProvider(
-  //   providers: [
-  //     ChangeNotifierProvider(create: (context) => UserTokenModel()),
-  //     ChangeNotifierProvider(create: (context) => UserModel())
-  //   ],
-  //   child: const MyApp(),
-  // ));
-  connectToStomp();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => UserTokenModel()),
+      ChangeNotifierProvider(create: (context) => UserModel())
+    ],
+    child: const MyApp(),
+  ));
+  // connectToStomp();
 }
 
 class MyApp extends StatelessWidget {
@@ -62,33 +58,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void onConnect(StompFrame frame) {
-  stompClient.subscribe(
-    destination: "/topic/greetings",
-    callback: (StompFrame frame) {
-      print(frame.body);
-    },
-  );
-
-  Timer(Duration(seconds: 10), () {
-    stompClient.send(destination: "/app/hello");
-  });
-}
-
-final stompClient = StompClient(
-  config: StompConfig(
-      url: "ws://localhost:7000/zolder/ws",
-      onConnect: onConnect,
-      onDebugMessage: print,
-      onWebSocketError: (dynamic error) => print(error.toString()),
-      stompConnectHeaders: {
-        'Authorization': "df53531c-2585-4b45-aef2-9423783878ff"
-      },
-      webSocketConnectHeaders: {
-        'Authorization': "df53531c-2585-4b45-aef2-9423783878ff"
-      }),
-);
-
-void connectToStomp() {
-  stompClient.activate();
-}
+// void onConnect(StompFrame frame) {
+//   stompClient.subscribe(
+//     destination: "/topic/book",
+//     callback: (StompFrame frame) {
+//       print("Books Altered");
+//     },
+//   );
+//
+//   stompClient.subscribe(
+//     destination: "/topic/location",
+//     callback: (StompFrame frame) {
+//       print("Location Altered");
+//     },
+//   );
+//
+//   stompClient.subscribe(
+//     destination: "/topic/user",
+//     callback: (StompFrame frame) {
+//       print("User Altered");
+//     },
+//   );
+//   //
+//   // Timer.periodic(Duration(seconds: 1), (timer) {
+//   //   stompClient.send(destination: "/app/hello");
+//   //   print("Time");
+//   // });
+// }
+//
+// final stompClient = StompClient(
+//   config: StompConfig(
+//       url: "ws://localhost:7000/zolder/stomp",
+//       onConnect: onConnect,
+//       onDebugMessage: print,
+//       onWebSocketError: (dynamic error) => print(error.toString()),
+//       stompConnectHeaders: <String,String>{
+//         'authorization': "a6a50bda-afbc-486f-8b0b-a8d1180e910e"
+//       },
+//       webSocketConnectHeaders: {
+//         'authorization': "a6a50bda-afbc-486f-8b0b-a8d1180e910e"
+//       }),
+// );
+//
+// void connectToStomp() {
+//   stompClient.activate();
+// }
