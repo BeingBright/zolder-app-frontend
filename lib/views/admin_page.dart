@@ -24,27 +24,25 @@ class _AdminPageState extends State<AdminPage> {
       ),
       drawer: Sidebar(
         children: [
-          SidebarTile(
-            title: "Users",
-            icons: Icons.person,
-            callback: () {
-              _navigatorKey.currentState!.pushNamed("Users");
-              Navigator.pop(context);
-              setState(() {
-                currentRoute = "Users";
-              });
-            },
+          Theme(
+            data: getTheme(context, "Users"),
+            child: SidebarTile(
+              title: "Users",
+              icons: Icons.person,
+              callback: () {
+                setPage("Users");
+              },
+            ),
           ),
-          SidebarTile(
-            title: "Location",
-            icons: Icons.inventory_2_outlined,
-            callback: () {
-              _navigatorKey.currentState!.pushNamed("Location");
-              Navigator.pop(context);
-              setState(() {
-                currentRoute = "Location";
-              });
-            },
+          Theme(
+            data: getTheme(context, "Location"),
+            child: SidebarTile(
+              title: "Location",
+              icons: Icons.inventory_2_outlined,
+              callback: () {
+                setPage("Location");
+              },
+            ),
           ),
         ],
       ),
@@ -54,6 +52,26 @@ class _AdminPageState extends State<AdminPage> {
         onGenerateRoute: _onGenerateRoute,
       ), // const UserView(),
     );
+  }
+
+  ThemeData getTheme(BuildContext context, String route) {
+    return (currentRoute == route)
+        ? ThemeData(
+            listTileTheme: ListTileThemeData(
+              tileColor: Theme.of(context).indicatorColor,
+            ),
+          )
+        : Theme.of(context);
+  }
+
+  void setPage(String route) {
+    if (currentRoute != route) {
+      _navigatorKey.currentState!.pushNamed(route);
+      setState(() {
+        currentRoute = route;
+      });
+    }
+    Navigator.pop(context);
   }
 
   Route _onGenerateRoute(RouteSettings settings) {

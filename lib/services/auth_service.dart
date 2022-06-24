@@ -26,11 +26,9 @@ class AuthService {
   }
 
   Future<UserToken> logoutUser() async {
-    UserToken.fromJson(
-      await controller.post(
-        '${APIConfiguration.auth}/logout',
-        headers: APIConfiguration.getHeadersWithToken(token.token),
-      ),
+    await controller.post(
+      '${APIConfiguration.auth}/logout',
+      headers: APIConfiguration.getHeadersWithToken(token.token),
     );
     return UserToken.empty();
   }

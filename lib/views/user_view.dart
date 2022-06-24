@@ -44,10 +44,12 @@ class _UserViewState extends State<UserView> {
             return GridView.builder(
               itemCount: userModel.users.length,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 350,
+                  maxCrossAxisExtent: 250,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   mainAxisExtent: 150),
+              physics: const ScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(0,0,0,100),
               itemBuilder: (BuildContext ctx, index) {
                 return UserCard(
                   user: userModel.users[index],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:zolder_app/models/user_token.dart';
 
+import '../components/toast-manager.dart';
 import '../controller/auth_command.dart';
 
 class LoginPage extends StatefulWidget {
@@ -166,8 +167,7 @@ class _LoginPageState extends State<LoginPage> {
         .onError((error, stackTrace) {
       setState(() {
         _errorMessage = "Invalid User";
-        Toast.show(_errorMessage,
-            duration: Toast.lengthLong, gravity: Toast.top);
+        ToastManager.show(context,_errorMessage);
       });
       return UserToken.empty();
     });

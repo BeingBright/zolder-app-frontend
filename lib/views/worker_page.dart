@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/sidebar.dart';
+import 'location-view.dart';
 
 class WorkerPage extends StatefulWidget {
   const WorkerPage({Key? key}) : super(key: key);
@@ -14,9 +15,10 @@ class _WorkerPageState extends State<WorkerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Worker Page"),
+        title: const Text("Location"),
       ),
       drawer: const Sidebar(children: []),
+      body: const LocationView(),
     );
   }
 }

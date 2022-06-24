@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 import 'package:zolder_app/mixins/encryption.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
 import 'package:zolder_app/models/user.dart';
 import 'package:zolder_app/models/user_model.dart';
 import 'package:zolder_app/services/user_service.dart';
+
+import '../components/toast-manager.dart';
 
 class UserCommand with provider, encryption {
   static final _instance = UserCommand._internal();
@@ -25,10 +26,9 @@ class UserCommand with provider, encryption {
     Future res = userService.removeUser(toRemove);
     res.then((_) {
       getUsers(context);
-      Toast.show(
+      ToastManager.show(
+        context,
         "User '${toRemove.username}' ${(toRemove.isActive) ? "Enabled" : "Disabled"}",
-        duration: Toast.lengthShort,
-        gravity: Toast.top,
       );
     });
     return res;
@@ -39,10 +39,9 @@ class UserCommand with provider, encryption {
     Future result = userService.addUser(user);
     result.then((_) {
       getUsers(context);
-      Toast.show(
+      ToastManager.show(
+        context,
         "Added User: '${user.username}'",
-        duration: Toast.lengthShort,
-        gravity: Toast.top,
       );
     });
     return result;
@@ -53,10 +52,9 @@ class UserCommand with provider, encryption {
     Future result = userService.updateUser(user);
     result.then((_) {
       getUsers(context);
-      Toast.show(
+      ToastManager.show(
+        context,
         "User: '${user.username}' Updated",
-        duration: Toast.lengthShort,
-        gravity: Toast.top,
       );
     });
     return result;

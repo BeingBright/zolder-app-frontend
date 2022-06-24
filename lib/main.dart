@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart';
+import 'package:zolder_app/components/toast-manager.dart';
 import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/views/admin_page.dart';
 import 'package:zolder_app/views/login_page.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ToastContext().init(context);
+    ToastManager.init(context);
     return MaterialApp(
       title: 'Zolder',
       debugShowCheckedModeBanner: false,
