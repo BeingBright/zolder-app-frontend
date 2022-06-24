@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:zolder_app/components/user_card.dart';
 import 'package:zolder_app/components/user_modal.dart';
 
-import '../components/sidebar.dart';
 import '../controller/user_command.dart';
 import '../models/user.dart';
 import '../models/user_model.dart';
@@ -25,10 +24,6 @@ class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Users"),
-      ),
-      drawer: const Sidebar(),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             UserCommand().getUsers(context);
@@ -49,10 +44,12 @@ class _UserViewState extends State<UserView> {
             return GridView.builder(
               itemCount: userModel.users.length,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 350,
+                  maxCrossAxisExtent: 250,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   mainAxisExtent: 150),
+              physics: const ScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(0,0,0,100),
               itemBuilder: (BuildContext ctx, index) {
                 return UserCard(
                   user: userModel.users[index],

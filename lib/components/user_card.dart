@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../controller/user_command.dart';
 import '../models/user.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({Key? key,
-    required this.user,
-    required this.onDelete,
-    required this.onUpdate})
+  const UserCard(
+      {Key? key,
+      required this.user,
+      required this.onDelete,
+      required this.onUpdate})
       : super(key: key);
 
   final Function(User user) onDelete;
@@ -27,12 +27,12 @@ class UserCard extends StatelessWidget {
         children: [
           Text(
             user.username!,
-            style: theme.textTheme.headline4,
+            style: theme.textTheme.headline4?.copyWith(color: Colors.white),
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             user.role!,
-            style: theme.textTheme.bodyMedium,
+            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,7 +43,10 @@ class UserCard extends StatelessWidget {
                   onPressed: () {
                     onUpdate(user);
                   },
-                  icon: const Icon(Icons.edit),
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
                   // color: theme.errorColor,
                 ),
               ),

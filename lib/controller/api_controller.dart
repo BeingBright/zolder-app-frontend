@@ -48,11 +48,16 @@ class APIController {
 
   dynamic getResult(Response response) {
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      if (response.body.isNotEmpty) {
+        return jsonDecode(response.body);
+      } else {
+        return;
+      }
     } else {
-      _onStatus(response.statusCode, response);
-      throw Exception(
-          "Call To ${response.request?.url.path} Ended With StatusCode ${response.statusCode}");
+      if (!_onStatus(response.statusCode, response)) {
+        throw Exception(
+            "Call To ${response.request?.url.path} Ended With StatusCode ${response.statusCode}");
+      }
     }
   }
 

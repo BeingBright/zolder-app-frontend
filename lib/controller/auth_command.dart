@@ -1,15 +1,13 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 import 'package:zolder_app/mixins/encryption.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
 import 'package:zolder_app/models/user_token.dart';
 import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/services/auth_service.dart';
 
-class AuthCommand with provider ,encryption{
+import '../components/toast-manager.dart';
+
+class AuthCommand with provider, encryption {
   static final _instance = AuthCommand._internal();
 
   AuthService authService = AuthService();
@@ -35,10 +33,9 @@ class AuthCommand with provider ,encryption{
     newToken.then(
       (newToken) {
         getProvided<UserTokenModel>(context).setToken(newToken);
-        Toast.show(
+        ToastManager.show(
+          context,
           "Logged In",
-          duration: Toast.lengthLong,
-          gravity: Toast.top,
         );
       },
     );
@@ -49,16 +46,13 @@ class AuthCommand with provider ,encryption{
     getProvided<UserTokenModel>(context).removeToken();
     authService.logoutUser().then(
       (response) {
-        Toast.show(
+        ToastManager.show(
+          context,
           "Logged Out",
-          duration: Toast.lengthLong,
-          gravity: Toast.top,
         );
       },
     );
   }
-
-
 
   void onError(int statusCode, Function callback) {}
 }
