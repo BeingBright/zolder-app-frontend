@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
+import 'package:zolder_app/mixins/encryption.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
 import 'package:zolder_app/models/user_token.dart';
 import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/services/auth_service.dart';
 
-class AuthCommand with provider {
+class AuthCommand with provider ,encryption{
   static final _instance = AuthCommand._internal();
 
   AuthService authService = AuthService();
@@ -57,9 +58,7 @@ class AuthCommand with provider {
     );
   }
 
-  String encrypt(String msg) {
-    return sha512.convert(utf8.encode(msg)).toString();
-  }
+
 
   void onError(int statusCode, Function callback) {}
 }
