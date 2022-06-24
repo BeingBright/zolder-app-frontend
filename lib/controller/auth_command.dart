@@ -13,9 +13,19 @@ class AuthCommand with provider {
 
   AuthService authService = AuthService();
 
+  UserTokenModel? userTokenModel;
+
   factory AuthCommand() => _instance;
 
-  AuthCommand._internal();
+  AuthCommand._internal() {
+    authService.onError(401, (body) {
+      userTokenModel?.removeToken();
+    });
+  }
+
+  setUserModel(BuildContext context) {
+    userTokenModel = getProvided<UserTokenModel>(context);
+  }
 
   Future<UserToken> loginUser(
       BuildContext context, String username, String password) {
@@ -50,4 +60,6 @@ class AuthCommand with provider {
   String encrypt(String msg) {
     return sha512.convert(utf8.encode(msg)).toString();
   }
+
+  void onError(int statusCode, Function callback) {}
 }

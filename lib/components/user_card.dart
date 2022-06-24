@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../commands/user_command.dart';
+import '../controller/user_command.dart';
 import '../models/user.dart';
 
 class UserCard extends StatelessWidget {

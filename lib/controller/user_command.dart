@@ -5,8 +5,6 @@ import 'package:zolder_app/models/user.dart';
 import 'package:zolder_app/models/user_model.dart';
 import 'package:zolder_app/services/user_service.dart';
 
-import '../models/user_token_model.dart';
-
 class UserCommand with provider {
   static final _instance = UserCommand._internal();
 
@@ -19,10 +17,6 @@ class UserCommand with provider {
   Future<List<User>> getUsers(BuildContext context) {
     Future<List<User>> users = userService.getUsers();
     users.then((users) => getProvided<UserModel>(context).setUsers(users));
-    users.onError((error, stackTrace) {
-      getProvided<UserTokenModel>(context).removeToken();
-      return <User>[];
-    });
     return users;
   }
 
@@ -36,8 +30,6 @@ class UserCommand with provider {
         gravity: Toast.top,
       );
     });
-    res.onError((error, stackTrace) =>
-        getProvided<UserTokenModel>(context).removeToken());
     return res;
   }
 }

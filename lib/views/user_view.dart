@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:zolder_app/components/user_card.dart';
 import 'package:zolder_app/components/user_modal.dart';
 
-import '../commands/user_command.dart';
 import '../components/sidebar.dart';
+import '../controller/user_command.dart';
 import '../models/user_model.dart';
 
 class UserView extends StatefulWidget {
@@ -17,6 +17,7 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   @override
   void initState() {
+    super.initState();
     UserCommand().getUsers(context);
   }
 
@@ -31,15 +32,14 @@ class _UserViewState extends State<UserView> {
           onPressed: () {
             UserCommand().getUsers(context);
             var addUserModal =
-                showDialog(context: context, builder: (context) => UserModal());
+                showDialog(context: context, builder: (context) => const UserModal());
             addUserModal.then((value) {
               print(value);
-
             });
           },
           child: const Icon(Icons.add)),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Consumer<UserModel>(
           builder: (context, userModel, child) {
             return GridView.builder(

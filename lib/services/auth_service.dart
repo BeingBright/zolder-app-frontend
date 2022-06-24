@@ -1,14 +1,12 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 import 'package:zolder_app/configuration/api_configuration.dart';
-import 'package:zolder_app/models/server_exception.dart';
 
+import '../controller/api_controller.dart';
 import '../models/user.dart';
 import '../models/user_token.dart';
 
 class AuthService {
   static final _instance = AuthService._newInstance();
+  final APIController controller = APIController();
 
   factory AuthService() => _instance;
 
@@ -17,26 +15,27 @@ class AuthService {
   UserToken token = UserToken.empty();
 
   Future<UserToken> loginUser(String username, String password) async {
-    var response = await http.post(Uri.parse('${APIConfiguration.auth}/login'),
+    token = UserToken.fromJson(
+      await controller.post(
+        '${APIConfiguration.auth}/login',
+        body: User(null, username, password, null, true),
         headers: APIConfiguration.baseHeader,
-        body: jsonEncode(User(null, username, password, null, true)));
-    if (response.statusCode == 200) {
-      token = UserToken.fromJson(jsonDecode(response.body));
-      return token;
-    }
-    throw ServerException.fromJson(jsonDecode(response.body));
+      ),
+    );
+    return token;
   }
 
   Future<UserToken> logoutUser() async {
-    var response = await http.post(
-      Uri.parse('${APIConfiguration.auth}/logout'),
-      headers: APIConfiguration.getHeadersWithToken(token.token),
+    UserToken.fromJson(
+      await controller.post(
+        '${APIConfiguration.auth}/logout',
+        headers: APIConfiguration.getHeadersWithToken(token.token),
+      ),
     );
-    if (response.statusCode == 200) {
-      token = UserToken.fromJson(jsonDecode(response.body));
-      return UserToken.empty();
+    return UserToken.empty();
+  }
 
-    }
-    throw ServerException.fromJson(jsonDecode(response.body));
+  void onError(int statusCode, Function(String body) callback) {
+    controller.addOnStatusCallback(statusCode, callback);
   }
 }
