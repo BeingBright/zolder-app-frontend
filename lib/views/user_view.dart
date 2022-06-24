@@ -5,6 +5,7 @@ import 'package:zolder_app/components/user_modal.dart';
 
 import '../components/sidebar.dart';
 import '../controller/user_command.dart';
+import '../models/user.dart';
 import '../models/user_model.dart';
 
 class UserView extends StatefulWidget {
@@ -32,7 +33,8 @@ class _UserViewState extends State<UserView> {
           onPressed: () {
             UserCommand().getUsers(context);
             var addUserModal = showDialog(
-                context: context, builder: (context) => const UserModal());
+                context: context,
+                builder: (context) => const UserModal(title: "Add User"));
             addUserModal.then((user) {
               if (user != null) {
                 UserCommand().addUser(context, user);
@@ -52,12 +54,35 @@ class _UserViewState extends State<UserView> {
                   mainAxisSpacing: 10,
                   mainAxisExtent: 150),
               itemBuilder: (BuildContext ctx, index) {
-                return UserCard(user: userModel.users[index]);
+                return UserCard(
+                  user: userModel.users[index],
+                  onDelete: onDelete,
+                  onUpdate: onUpdate,
+                );
               },
             );
           },
         ),
       ),
     );
+  }
+
+  void onDelete(User user) {
+    UserCommand().removeUsers(context, user);
+  }
+
+  void onUpdate(User user) {
+    var updateUserModal = showDialog(
+      context: context,
+      builder: (context) => UserModal(
+        currentUser: user,
+        title: "Update User",
+      ),
+    );
+    updateUserModal.then((user) {
+      if (user != null) {
+        UserCommand().updateUser(context, user);
+      }
+    });
   }
 }

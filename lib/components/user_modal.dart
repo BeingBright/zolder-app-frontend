@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:zolder_app/models/user.dart';
 
 class UserModal extends StatefulWidget {
-  const UserModal({Key? key}) : super(key: key);
+  const UserModal({
+    Key? key,
+    this.currentUser,
+    required this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  final User? currentUser;
 
   @override
   State<UserModal> createState() => _UserModalState();
@@ -18,9 +26,18 @@ class _UserModalState extends State<UserModal> {
   final _formkey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.currentUser != null) {
+      _usernameController.text = widget.currentUser!.username!;
+      _role = widget.currentUser!.role!;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Add user"),
+      title: Text(widget.title),
       content: Form(
         key: _formkey,
         child: Column(
@@ -28,6 +45,7 @@ class _UserModalState extends State<UserModal> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
+              textInputAction: TextInputAction.next,
               keyboardType: TextInputType.name,
               controller: _usernameController,
               autocorrect: false,
@@ -44,6 +62,7 @@ class _UserModalState extends State<UserModal> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
             TextFormField(
+              textInputAction: TextInputAction.next,
               obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               controller: _passwordController,
@@ -100,16 +119,18 @@ class _UserModalState extends State<UserModal> {
             if (_formkey.currentState!.validate()) {
               Navigator.of(context, rootNavigator: true).pop(
                 User(
-                  null,
+                  (widget.currentUser != null) ? widget.currentUser!.id : null,
                   _usernameController.text,
                   _passwordController.text,
                   _role,
-                  true,
+                  (widget.currentUser != null)
+                      ? widget.currentUser!.isActive
+                      : true,
                 ),
               );
             }
           },
-          child: const Text("Add User"),
+          child: Text(widget.title),
         ),
       ],
     );

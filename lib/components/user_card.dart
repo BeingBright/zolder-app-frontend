@@ -4,7 +4,14 @@ import '../controller/user_command.dart';
 import '../models/user.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({Key? key, required this.user}) : super(key: key);
+  const UserCard({Key? key,
+    required this.user,
+    required this.onDelete,
+    required this.onUpdate})
+      : super(key: key);
+
+  final Function(User user) onDelete;
+  final Function(User user) onUpdate;
 
   final User user;
 
@@ -21,6 +28,7 @@ class UserCard extends StatelessWidget {
           Text(
             user.username!,
             style: theme.textTheme.headline4,
+            overflow: TextOverflow.ellipsis,
           ),
           Text(
             user.role!,
@@ -32,7 +40,9 @@ class UserCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    onUpdate(user);
+                  },
                   icon: const Icon(Icons.edit),
                   // color: theme.errorColor,
                 ),
@@ -41,7 +51,7 @@ class UserCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                     onPressed: () {
-                      UserCommand().removeUsers(context, user);
+                      onDelete(user);
                     },
                     icon: (!user.isActive)
                         ? const Icon(Icons.person_add)

@@ -44,7 +44,7 @@ class UserService {
   }
 
   Future updateUser(User user) async {
-    return await controller.post(APIConfiguration.user,
+    return await controller.put(APIConfiguration.user,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           HttpHeaders.authorizationHeader: AuthService().token.token,

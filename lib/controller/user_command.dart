@@ -46,4 +46,18 @@ class UserCommand with provider, encryption {
     });
     return result;
   }
+
+  Future updateUser(BuildContext context, User user) {
+    user.password = encrypt(user.password!);
+    Future result = userService.updateUser(user);
+    result.then((_) {
+      getUsers(context);
+      Toast.show(
+        "User: '${user.username}' Updated",
+        duration: Toast.lengthShort,
+        gravity: Toast.top,
+      );
+    });
+    return result;
+  }
 }
