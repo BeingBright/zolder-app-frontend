@@ -35,6 +35,7 @@ class UserCommand with provider, encryption {
   }
 
   Future addUser(BuildContext context, User user) {
+    user.password = encrypt(user.password!);
     Future result = userService.addUser(user);
     result.then((_) {
       getUsers(context);
