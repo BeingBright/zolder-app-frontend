@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:zolder_app/components/user_card.dart';
 import 'package:zolder_app/components/user_modal.dart';
 
-import '../commands/user_command.dart';
 import '../components/sidebar.dart';
+import '../controller/user_command.dart';
+import '../models/user.dart';
 import '../models/user_model.dart';
 
 class UserView extends StatefulWidget {
@@ -17,6 +18,7 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   @override
   void initState() {
+    super.initState();
     UserCommand().getUsers(context);
   }
 
@@ -30,16 +32,18 @@ class _UserViewState extends State<UserView> {
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             UserCommand().getUsers(context);
-            var addUserModal =
-                showDialog(context: context, builder: (context) => UserModal());
-            addUserModal.then((value) {
-              print(value);
-
+            var addUserModal = showDialog(
+                context: context,
+                builder: (context) => const UserModal(title: "Add User"));
+            addUserModal.then((user) {
+              if (user != null) {
+                UserCommand().addUser(context, user);
+              }
             });
           },
           child: const Icon(Icons.add)),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Consumer<UserModel>(
           builder: (context, userModel, child) {
             return GridView.builder(
@@ -50,12 +54,35 @@ class _UserViewState extends State<UserView> {
                   mainAxisSpacing: 10,
                   mainAxisExtent: 150),
               itemBuilder: (BuildContext ctx, index) {
-                return UserCard(user: userModel.users[index]);
+                return UserCard(
+                  user: userModel.users[index],
+                  onDelete: onDelete,
+                  onUpdate: onUpdate,
+                );
               },
             );
           },
         ),
       ),
     );
+  }
+
+  void onDelete(User user) {
+    UserCommand().removeUsers(context, user);
+  }
+
+  void onUpdate(User user) {
+    var updateUserModal = showDialog(
+      context: context,
+      builder: (context) => UserModal(
+        currentUser: user,
+        title: "Update User",
+      ),
+    );
+    updateUserModal.then((user) {
+      if (user != null) {
+        UserCommand().updateUser(context, user);
+      }
+    });
   }
 }

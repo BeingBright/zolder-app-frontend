@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/commands/auth_command.dart';
 
+import '../controller/auth_command.dart';
 import '../models/user_token_model.dart';
 
 class Sidebar extends StatelessWidget {
@@ -46,7 +46,7 @@ class Sidebar extends StatelessWidget {
                     ],
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 const Divider(),
                 ListTile(
                   title: Row(

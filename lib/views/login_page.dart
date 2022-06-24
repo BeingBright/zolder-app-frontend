@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:zolder_app/models/user_token.dart';
 
-import '../commands/auth_command.dart';
+import '../controller/auth_command.dart';
 
 class LoginPage extends StatefulWidget {
   final double? mainPadding;
@@ -36,10 +36,12 @@ class _LoginPageState extends State<LoginPage> {
     _mainPadding = (widget.mainPadding) ?? _mainPadding;
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
+
   }
 
   @override
   Widget build(BuildContext context) {
+    AuthCommand().setUserModel(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
