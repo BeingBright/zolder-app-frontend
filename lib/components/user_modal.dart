@@ -45,6 +45,7 @@ class _UserModalState extends State<UserModal> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
+              autofocus: true,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.name,
               controller: _usernameController,
