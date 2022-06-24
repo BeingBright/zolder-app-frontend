@@ -16,7 +16,7 @@ class _OfficePageState extends State<OfficePage> {
       appBar: AppBar(
         title: const Text("Office Page"),
       ),
-      drawer: const Sidebar(),
+      drawer: const Sidebar(children: []),
     );
   }
 }

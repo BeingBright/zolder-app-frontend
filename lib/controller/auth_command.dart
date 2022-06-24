@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:zolder_app/mixins/encryption.dart';
@@ -9,7 +6,7 @@ import 'package:zolder_app/models/user_token.dart';
 import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/services/auth_service.dart';
 
-class AuthCommand with provider ,encryption{
+class AuthCommand with provider, encryption {
   static final _instance = AuthCommand._internal();
 
   AuthService authService = AuthService();
@@ -57,8 +54,6 @@ class AuthCommand with provider ,encryption{
       },
     );
   }
-
-
 
   void onError(int statusCode, Function callback) {}
 }

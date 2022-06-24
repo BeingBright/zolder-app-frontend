@@ -5,7 +5,9 @@ import '../controller/auth_command.dart';
 import '../models/user_token_model.dart';
 
 class Sidebar extends StatelessWidget {
-  const Sidebar({Key? key}) : super(key: key);
+  const Sidebar({Key? key, required this.children}) : super(key: key);
+
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,10 @@ class Sidebar extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: children,
                 ),
                 const Spacer(),
                 const Divider(),

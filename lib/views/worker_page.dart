@@ -16,7 +16,7 @@ class _WorkerPageState extends State<WorkerPage> {
       appBar: AppBar(
         title: const Text("Worker Page"),
       ),
-      drawer: const Sidebar(),
+      drawer: const Sidebar(children: []),
     );
   }
 }
