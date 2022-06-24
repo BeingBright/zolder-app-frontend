@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget getPage(String type) {
     switch (type) {
       case "ADMIN":
-        return const AdminPage();
+        return AdminPage();
 
       case "WORKER":
         return const WorkerPage();
