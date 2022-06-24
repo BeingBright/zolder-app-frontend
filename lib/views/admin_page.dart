@@ -14,30 +14,36 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  String currentRoute = "USER";
+  String currentRoute = "Users";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Users"),
+        title: Text(currentRoute),
       ),
       drawer: Sidebar(
         children: [
           SidebarTile(
-            title: "User",
+            title: "Users",
             icons: Icons.person,
             callback: () {
-              _navigatorKey.currentState!.pushNamed("USER");
+              _navigatorKey.currentState!.pushNamed("Users");
               Navigator.pop(context);
+              setState(() {
+                currentRoute = "Users";
+              });
             },
           ),
           SidebarTile(
             title: "Location",
             icons: Icons.inventory_2_outlined,
             callback: () {
-              _navigatorKey.currentState!.pushNamed("LOCATION");
+              _navigatorKey.currentState!.pushNamed("Location");
               Navigator.pop(context);
+              setState(() {
+                currentRoute = "Location";
+              });
             },
           ),
         ],
@@ -54,11 +60,11 @@ class _AdminPageState extends State<AdminPage> {
     late Widget page;
 
     switch (settings.name) {
-      case "USER":
+      case "Users":
         page = const UserView();
 
         break;
-      case "LOCATION":
+      case "Location":
         page = const LocationView();
         break;
 

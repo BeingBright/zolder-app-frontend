@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/sidebar.dart';
+import 'location-view.dart';
 
 class OfficePage extends StatefulWidget {
   const OfficePage({Key? key}) : super(key: key);
@@ -14,9 +15,12 @@ class _OfficePageState extends State<OfficePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Office Page"),
+        title: const Text("Location"),
       ),
-      drawer: const Sidebar(children: []),
+      drawer: const Sidebar(
+        children: [],
+      ),
+      body: const LocationView(),
     );
   }
 }
