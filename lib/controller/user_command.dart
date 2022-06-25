@@ -5,7 +5,7 @@ import 'package:zolder_app/models/user.dart';
 import 'package:zolder_app/models/user_model.dart';
 import 'package:zolder_app/services/user_service.dart';
 
-import '../components/toast-manager.dart';
+import '../components/toast_manager.dart';
 
 class UserCommand with provider, encryption {
   static final _instance = UserCommand._internal();

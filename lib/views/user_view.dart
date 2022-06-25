@@ -41,22 +41,26 @@ class _UserViewState extends State<UserView> {
         padding: const EdgeInsets.all(8),
         child: Consumer<UserModel>(
           builder: (context, userModel, child) {
-            return GridView.builder(
-              itemCount: userModel.users.length,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 250,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  mainAxisExtent: 150),
-              physics: const ScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(0,0,0,100),
-              itemBuilder: (BuildContext ctx, index) {
-                return UserCard(
-                  user: userModel.users[index],
-                  onDelete: onDelete,
-                  onUpdate: onUpdate,
-                );
-              },
+            return RefreshIndicator(
+              onRefresh: () => UserCommand().getUsers(context),
+              triggerMode: RefreshIndicatorTriggerMode.anywhere,
+              child: GridView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: userModel.users.length,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 250,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    mainAxisExtent: 150),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 100),
+                itemBuilder: (BuildContext ctx, index) {
+                  return UserCard(
+                    user: userModel.users[index],
+                    onDelete: onDelete,
+                    onUpdate: onUpdate,
+                  );
+                },
+              ),
             );
           },
         ),

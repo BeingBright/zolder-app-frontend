@@ -4,7 +4,7 @@ import 'package:zolder_app/configuration/api_configuration.dart';
 import 'package:zolder_app/models/user.dart';
 import 'package:zolder_app/services/auth_service.dart';
 
-import '../controller/api_controller.dart';
+import 'api_controller.dart';
 
 class UserService {
   static final _instance = UserService._newInstance();

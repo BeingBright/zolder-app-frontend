@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app/views/location-view.dart';
+import 'package:zolder_app/views/location_view.dart';
 import 'package:zolder_app/views/user_view.dart';
 
 import '../components/sidebar.dart';

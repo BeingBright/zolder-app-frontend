@@ -1,6 +1,6 @@
 import 'package:zolder_app/configuration/api_configuration.dart';
 
-import '../controller/api_controller.dart';
+import 'api_controller.dart';
 import '../models/user.dart';
 import '../models/user_token.dart';
 

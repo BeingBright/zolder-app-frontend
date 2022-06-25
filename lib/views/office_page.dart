@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/sidebar.dart';
-import 'location-view.dart';
+import 'location_view.dart';
 
 class OfficePage extends StatefulWidget {
   const OfficePage({Key? key}) : super(key: key);

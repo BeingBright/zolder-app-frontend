@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/components/toast-manager.dart';
+import 'package:zolder_app/components/toast_manager.dart';
+import 'package:zolder_app/models/location_model.dart';
 import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/views/admin_page.dart';
 import 'package:zolder_app/views/login_page.dart';
@@ -14,7 +15,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserTokenModel()),
-      ChangeNotifierProvider(create: (context) => UserModel())
+      ChangeNotifierProvider(create: (context) => UserModel()),
+      ChangeNotifierProvider(create: (context) => LocationModel())
     ],
     child: const MyApp(),
   ));
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
   Widget getPage(String type) {
     switch (type) {
       case "ADMIN":
-        return AdminPage();
+        return const AdminPage();
 
       case "WORKER":
         return const WorkerPage();
@@ -57,6 +59,10 @@ class MyApp extends StatelessWidget {
     }
   }
 }
+
+// void test() async{
+//   print(await LocationCommand().getLocationsByBuilding("Celc"));
+// }
 
 // void onConnect(StompFrame frame) {
 //   stompClient.subscribe(
