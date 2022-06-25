@@ -4,6 +4,7 @@ import 'package:zolder_app/models/location.dart';
 
 import '../configuration/api_configuration.dart';
 import 'api_controller.dart';
+import 'auth_service.dart';
 
 class LocationService {
   static final _instance = LocationService._newInstance();
@@ -18,7 +19,7 @@ class LocationService {
       "${APIConfiguration.location}/location/$buildingLoc/$inventoryLoc",
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "5df703e6-520d-4701-9bae-b8ab47bf9441"
+        HttpHeaders.authorizationHeader: AuthService().token.token
       },
     ));
   }
@@ -28,7 +29,7 @@ class LocationService {
       APIConfiguration.location,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "5df703e6-520d-4701-9bae-b8ab47bf9441"
+        HttpHeaders.authorizationHeader: AuthService().token.token
       },
     ));
   }
@@ -38,7 +39,7 @@ class LocationService {
       "${APIConfiguration.location}/location/$buildingLoc",
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "5df703e6-520d-4701-9bae-b8ab47bf9441"
+        HttpHeaders.authorizationHeader: AuthService().token.token
       },
     ));
   }
