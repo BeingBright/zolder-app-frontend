@@ -13,14 +13,10 @@ class OfficePage extends StatefulWidget {
 class _OfficePageState extends State<OfficePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Location"),
-      ),
-      drawer: const Sidebar(
+    return LocationView(
+      sidebar: const Sidebar(
         children: [],
       ),
-      body: const LocationView(),
     );
   }
 }

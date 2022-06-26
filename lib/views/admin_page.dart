@@ -13,44 +13,37 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
   String currentRoute = "Users";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(currentRoute),
-      ),
-      drawer: Sidebar(
-        children: [
-          Theme(
-            data: getTheme(context, "Users"),
-            child: SidebarTile(
-              title: "Users",
-              icons: Icons.person,
-              callback: () {
-                setPage("Users");
-              },
-            ),
+    return _onGenerateRoute(currentRoute);
+  }
+
+  Sidebar _buildSidebar() {
+    return Sidebar(
+      children: [
+        Theme(
+          data: getTheme(context, "Users"),
+          child: SidebarTile(
+            title: "Users",
+            icons: Icons.person,
+            callback: () {
+              setPage("Users");
+            },
           ),
-          Theme(
-            data: getTheme(context, "Location"),
-            child: SidebarTile(
-              title: "Location",
-              icons: Icons.inventory_2_outlined,
-              callback: () {
-                setPage("Location");
-              },
-            ),
+        ),
+        Theme(
+          data: getTheme(context, "Location"),
+          child: SidebarTile(
+            title: "Location",
+            icons: Icons.inventory_2_outlined,
+            callback: () {
+              setPage("Location");
+            },
           ),
-        ],
-      ),
-      body: Navigator(
-        key: _navigatorKey,
-        initialRoute: currentRoute,
-        onGenerateRoute: _onGenerateRoute,
-      ), // const UserView(),
+        ),
+      ],
     );
   }
 
@@ -65,37 +58,28 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   void setPage(String route) {
-    if (currentRoute != route) {
-      _navigatorKey.currentState!.pushNamed(route);
-      setState(() {
-        currentRoute = route;
-      });
-    }
-    Navigator.pop(context);
+    setState(() {
+      currentRoute = route;
+    });
   }
 
-  Route _onGenerateRoute(RouteSettings settings) {
+  Widget _onGenerateRoute(String routeName) {
     late Widget page;
 
-    switch (settings.name) {
+    switch (routeName) {
       case "Users":
-        page = const UserView();
+        page = UserView(sidebar: _buildSidebar());
 
         break;
       case "Location":
-        page = const LocationView();
+        page = LocationView(sidebar: _buildSidebar());
         break;
 
       default:
-        page = const UserView();
+        page = UserView(sidebar: _buildSidebar());
         break;
     }
 
-    return MaterialPageRoute<dynamic>(
-      builder: (context) {
-        return page;
-      },
-      settings: settings,
-    );
+    return page;
   }
 }

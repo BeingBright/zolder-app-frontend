@@ -13,12 +13,10 @@ class WorkerPage extends StatefulWidget {
 class _WorkerPageState extends State<WorkerPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Location"),
+    return LocationView(
+      sidebar: const Sidebar(
+        children: [],
       ),
-      drawer: const Sidebar(children: []),
-      body: const LocationView(),
     );
   }
 }

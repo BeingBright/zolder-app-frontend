@@ -8,7 +8,9 @@ import 'package:zolder_app/models/location_model.dart';
 import '../models/book.dart';
 
 class LocationView extends StatefulWidget {
-  const LocationView({Key? key}) : super(key: key);
+  const LocationView({Key? key, required this.sidebar}) : super(key: key);
+
+  final Widget sidebar;
 
   @override
   State<LocationView> createState() => _LocationViewState();
@@ -26,35 +28,41 @@ class _LocationViewState extends State<LocationView> with provider {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocationModel>(
-      builder: (context, locationModel, child) {
-        return DefaultTabController(
-          length: locationItems.length,
-          child: Scaffold(
-            primary: false,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: TabBar(
-                padding: const EdgeInsets.all(8),
-                tabs: locationItems.map((locationItem) {
-                  return locationItem.title;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Location"),
+      ),
+      drawer: widget.sidebar,
+      body: Consumer<LocationModel>(
+        builder: (context, locationModel, child) {
+          return DefaultTabController(
+            length: locationItems.length,
+            child: Scaffold(
+              primary: false,
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: TabBar(
+                  padding: const EdgeInsets.all(8),
+                  tabs: locationItems.map((locationItem) {
+                    return locationItem.title;
+                  }).toList(),
+                ),
+              ),
+              body: TabBarView(
+                children: locationItems.map((locationItem) {
+                  return RefreshIndicator(
+                    onRefresh: _getLocations,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: locationItem.body,
+                    ),
+                  );
                 }).toList(),
               ),
             ),
-            body: TabBarView(
-              children: locationItems.map((locationItem) {
-                return RefreshIndicator(
-                  onRefresh: _getLocations,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: locationItem.body,
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -73,8 +81,6 @@ class _LocationViewState extends State<LocationView> with provider {
       });
     });
   }
-
-  _buildTab() {}
 
   Widget _buildTabBody(List<Book> books) {
     return Text(books.toString() +

@@ -8,7 +8,9 @@ import '../models/user.dart';
 import '../models/user_model.dart';
 
 class UserView extends StatefulWidget {
-  const UserView({Key? key}) : super(key: key);
+  const UserView({Key? key, required this.sidebar}) : super(key: key);
+
+  final Widget sidebar;
 
   @override
   State<UserView> createState() => _UserViewState();
@@ -24,6 +26,10 @@ class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Users"),
+      ),
+      drawer: widget.sidebar,
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             UserCommand().getUsers(context);
