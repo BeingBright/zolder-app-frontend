@@ -24,22 +24,27 @@ class _AdminPageState extends State<AdminPage> {
     return Sidebar(
       children: [
         Theme(
-          data: getTheme(context, "Users"),
-          child: SidebarTile(
-            title: "Users",
-            icons: Icons.person,
-            callback: () {
-              setPage("Users");
-            },
-          ),
-        ),
-        Theme(
           data: getTheme(context, "Location"),
           child: SidebarTile(
             title: "Location",
             icons: Icons.inventory_2_outlined,
             callback: () {
               setPage("Location");
+
+              Navigator.push(context, _buildRoute(LocationView(sidebar: _buildSidebar())));
+
+            },
+          ),
+        ),
+        Theme(
+          data: getTheme(context, "Users"),
+          child: SidebarTile(
+            title: "Users",
+            icons: Icons.person,
+            callback: () {
+              setPage("Users");
+
+              Navigator.push(context, _buildRoute(UserView(sidebar: _buildSidebar())));
             },
           ),
         ),
@@ -81,5 +86,11 @@ class _AdminPageState extends State<AdminPage> {
     }
 
     return page;
+  }
+
+  Route _buildRoute(Widget page) {
+    return MaterialPageRoute(
+      builder: (context) => page,
+    );
   }
 }

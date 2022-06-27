@@ -21,7 +21,6 @@ class _LocationViewState extends State<LocationView> with provider {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getLocations();
   }
