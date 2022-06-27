@@ -4,6 +4,7 @@ import 'package:zolder_app/components/location_item.dart';
 import 'package:zolder_app/controller/location_command.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
 import 'package:zolder_app/models/location_model.dart';
+import 'package:zolder_app/models/user_token_model.dart';
 
 import '../models/book.dart';
 
@@ -37,6 +38,11 @@ class _LocationViewState extends State<LocationView> with provider {
               onPressed: () {},
               icon: const Icon(Icons.search),
             ),
+            if (Provider.of<UserTokenModel>(context).userToken.role == "ADMIN")
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.add),
+              )
           ],
           bottom: TabBar(
             padding: const EdgeInsets.all(8),

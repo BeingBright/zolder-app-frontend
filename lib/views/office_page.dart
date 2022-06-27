@@ -13,8 +13,8 @@ class OfficePage extends StatefulWidget {
 class _OfficePageState extends State<OfficePage> {
   @override
   Widget build(BuildContext context) {
-    return LocationView(
-      sidebar: const Sidebar(
+    return const LocationView(
+      sidebar: Sidebar(
         children: [],
       ),
     );

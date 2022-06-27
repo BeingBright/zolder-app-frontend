@@ -13,8 +13,8 @@ class WorkerPage extends StatefulWidget {
 class _WorkerPageState extends State<WorkerPage> {
   @override
   Widget build(BuildContext context) {
-    return LocationView(
-      sidebar: const Sidebar(
+    return const LocationView(
+      sidebar: Sidebar(
         children: [],
       ),
     );

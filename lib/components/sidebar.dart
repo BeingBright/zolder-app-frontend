@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zolder_app/views/login_page.dart';
 
 import '../controller/auth_command.dart';
+import '../main.dart';
 import '../models/user_token_model.dart';
 
 class Sidebar extends StatelessWidget {
@@ -73,6 +75,12 @@ class Sidebar extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyApp(),
+                        ),
+                      );
                       AuthCommand().logoutUser(context);
                     },
                   ),

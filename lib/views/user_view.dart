@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/components/user_card.dart';
-import 'package:zolder_app/components/user_modal.dart';
+import 'package:zolder_app/components/user/user_card.dart';
 
+import '../components/user/user_modal.dart';
 import '../controller/user_command.dart';
 import '../models/user.dart';
 import '../models/user_model.dart';
