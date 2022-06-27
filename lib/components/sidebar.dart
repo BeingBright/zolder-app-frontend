@@ -78,7 +78,7 @@ class Sidebar extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MyApp(),
+                          builder: (context) => const MyApp(),
                         ),
                       );
                       AuthCommand().logoutUser(context);
