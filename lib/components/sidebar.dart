@@ -56,22 +56,27 @@ class Sidebar extends StatelessWidget {
                   ),
                 ],
               ),
-              ListTile(
-                title: Row(
-                  children: const [
-                    Icon(Icons.logout),
-                    Spacer(),
-                    Text("Log out"),
-                    Spacer(),
-                    Icon(
-                      Icons.logout,
-                      color: Colors.transparent,
+              Column(
+                children: [
+                  const Divider(),
+                  ListTile(
+                    title: Row(
+                      children: const [
+                        Icon(Icons.logout),
+                        Spacer(),
+                        Text("Log out"),
+                        Spacer(),
+                        Icon(
+                          Icons.logout,
+                          color: Colors.transparent,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                onTap: () {
-                  AuthCommand().logoutUser(context);
-                },
+                    onTap: () {
+                      AuthCommand().logoutUser(context);
+                    },
+                  ),
+                ],
               )
             ],
           ),
