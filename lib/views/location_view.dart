@@ -28,40 +28,40 @@ class _LocationViewState extends State<LocationView> with provider {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Location"),
-      ),
-      drawer: widget.sidebar,
-      body: Consumer<LocationModel>(
-        builder: (context, locationModel, child) {
-          return DefaultTabController(
-            length: locationItems.length,
-            child: Scaffold(
-              primary: false,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                title: TabBar(
-                  padding: const EdgeInsets.all(8),
-                  tabs: locationItems.map((locationItem) {
-                    return locationItem.title;
-                  }).toList(),
-                ),
-              ),
-              body: TabBarView(
-                children: locationItems.map((locationItem) {
-                  return RefreshIndicator(
-                    onRefresh: _getLocations,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: locationItem.body,
-                    ),
-                  );
-                }).toList(),
-              ),
+    return DefaultTabController(
+      length: locationItems.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Location"),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search),
             ),
-          );
-        },
+          ],
+          bottom: TabBar(
+            padding: const EdgeInsets.all(8),
+            tabs: locationItems.map((locationItem) {
+              return locationItem.title;
+            }).toList(),
+          ),
+        ),
+        drawer: widget.sidebar,
+        body: Consumer<LocationModel>(
+          builder: (context, locationModel, child) {
+            return TabBarView(
+              children: locationItems.map((locationItem) {
+                return RefreshIndicator(
+                  onRefresh: _getLocations,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: locationItem.body,
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        ),
       ),
     );
   }

@@ -13,7 +13,7 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  String currentRoute = "Users";
+  String currentRoute = "Location";
 
   @override
   Widget build(BuildContext context) {
