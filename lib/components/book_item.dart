@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zolder_app/models/user_token_model.dart';
 
 import '../models/book.dart';
 
@@ -15,7 +17,9 @@ class BookItem extends StatelessWidget {
         print(book);
       },
       onLongPress: () {
-        print("$book LONG BOI PRESS");
+        if (Provider.of<UserTokenModel>(context,listen: false).userToken.role == "ADMIN") {
+          print("$book LONG BOI PRESS");
+        }
       },
       child: Text(
         book.bookId,
