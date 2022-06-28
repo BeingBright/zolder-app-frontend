@@ -73,12 +73,7 @@ class Sidebar extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyApp(),
-                        ),
-                      );
+                      Navigator.pushReplacementNamed(context, '/');
                       AuthCommand().logoutUser(context);
                     },
                   ),

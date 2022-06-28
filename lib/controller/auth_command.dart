@@ -33,6 +33,8 @@ class AuthCommand with provider, encryption {
     newToken.then(
       (newToken) {
         getProvided<UserTokenModel>(context).setToken(newToken);
+        Navigator.pushReplacementNamed(
+            context, '/${newToken.role.toLowerCase()}');
         ToastManager.show(
           context,
           "Logged In",

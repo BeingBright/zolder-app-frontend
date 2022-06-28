@@ -12,51 +12,42 @@ import 'models/user_model.dart';
 
 //
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => UserTokenModel()),
-      ChangeNotifierProvider(create: (context) => UserModel()),
-      ChangeNotifierProvider(create: (context) => LocationModel())
-    ],
-    child: const MyApp(),
-  ));
-  // connectToStomp();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserTokenModel()),
+        ChangeNotifierProvider(create: (context) => UserModel()),
+        ChangeNotifierProvider(create: (context) => LocationModel())
+      ],
+      child: const HomePage(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  static GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     ToastManager.init(context);
     return MaterialApp(
+      navigatorKey: globalKey,
       title: 'Zolder',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: Consumer<UserTokenModel>(
-        builder: (context, userTokenModel, child) {
-          return getPage(userTokenModel.userToken.role);
-        },
-      ),
+      // home: const LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoginPage(),
+        '/admin': (context) => const AdminPage(),
+        '/worker': (context) => const WorkerPage(),
+        '/office': (context) => const OfficePage(),
+      },
     );
-  }
-
-  Widget getPage(String type) {
-    switch (type) {
-      case "ADMIN":
-        return const AdminPage();
-
-      case "WORKER":
-        return const WorkerPage();
-
-      case "OFFICE":
-        return const OfficePage();
-
-      default:
-        return const LoginPage();
-    }
   }
 }
 
