@@ -44,6 +44,15 @@ class LocationService {
     ));
   }
 
+  Future addLocation(Location location) async{
+    return await controller.post(APIConfiguration.location,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: AuthService().token.token,
+        },
+        body: location);
+  }
+
   List<Location> locationFromJson(List json) {
     return List<Location>.from(json.map((e) {
       return Location.fromJson(e);

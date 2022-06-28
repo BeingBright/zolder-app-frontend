@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/components/location_item.dart';
+import 'package:zolder_app/components/book_table.dart';
+import 'package:zolder_app/components/location/location_item.dart';
+import 'package:zolder_app/components/location/location_modal.dart';
+import 'package:zolder_app/components/toast_manager.dart';
 import 'package:zolder_app/controller/location_command.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
+import 'package:zolder_app/models/location.dart';
 import 'package:zolder_app/models/location_model.dart';
 import 'package:zolder_app/models/user_token_model.dart';
-
-import '../models/book.dart';
 
 class LocationView extends StatefulWidget {
   const LocationView({Key? key, required this.sidebar}) : super(key: key);
@@ -19,6 +21,31 @@ class LocationView extends StatefulWidget {
 
 class _LocationViewState extends State<LocationView> with provider {
   List<LocationItem> locationItems = [];
+
+  void _onRefresh() {
+    _getLocations();
+  }
+
+  void _onAddLocation() {
+    var addLocationModal = showDialog(
+      context: context,
+      builder: (context) => LocationModal(),
+    );
+
+    addLocationModal.then((loc) => _addLocation(loc));
+  }
+
+  void _addLocation(Location? location) {
+    if (location == null) return;
+    Future result = LocationCommand().addLocation(location);
+    result.then((value) => _getLocations());
+    result.onError((error, stackTrace) => {
+          ToastManager.show(context,
+              "Location: '${location.inventoryLocation}' already exists")
+        });
+  }
+
+  void _onSearch() {}
 
   @override
   void initState() {
@@ -35,12 +62,16 @@ class _LocationViewState extends State<LocationView> with provider {
           title: const Text("Location"),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: _onRefresh,
+              icon: const Icon(Icons.refresh),
+            ),
+            IconButton(
+              onPressed: _onSearch,
               icon: const Icon(Icons.search),
             ),
             if (Provider.of<UserTokenModel>(context).userToken.role == "ADMIN")
               IconButton(
-                onPressed: () {},
+                onPressed: _onAddLocation,
                 icon: const Icon(Icons.add),
               )
           ],
@@ -75,24 +106,19 @@ class _LocationViewState extends State<LocationView> with provider {
     return LocationCommand().getLocationsByBuilding("Celc").then((locations) {
       getProvided<LocationModel>(context).setLocations(locations);
       setState(() {
-        locationItems = locations.map((e) {
+        locationItems = locations.map((loc) {
           return LocationItem(
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(e.inventoryLocation!),
+                child: Text(loc.inventoryLocation!),
               ),
-              _buildTabBody(e.books));
+              _buildTabBody(loc));
         }).toList();
       });
     });
   }
 
-  Widget _buildTabBody(List<Book> books) {
-    return Text(books.toString() +
-        books.toString() +
-        books.toString() +
-        books.toString() +
-        books.toString() +
-        books.toString());
+  Widget _buildTabBody(Location location) {
+    return BookTable(location: location);
   }
 }

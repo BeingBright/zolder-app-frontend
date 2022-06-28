@@ -19,4 +19,10 @@ class LocationCommand with provider {
   Future<List<Location>> getLocationsByBuilding(String buildingLoc) {
     return locationService.getLocationsByBuilding(buildingLoc);
   }
+
+  Future addLocation(Location location) {
+    Future result = locationService.addLocation(location);
+
+    return result;
+  }
 }
