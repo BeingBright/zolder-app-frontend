@@ -87,13 +87,7 @@ class _LocationViewState extends State<LocationView> with provider {
           builder: (context, locationModel, child) {
             return TabBarView(
               children: locationItems.map((locationItem) {
-                return RefreshIndicator(
-                  onRefresh: _getLocations,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: locationItem.body,
-                  ),
-                );
+                return locationItem.body;
               }).toList(),
             );
           },

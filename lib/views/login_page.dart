@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zolder_app/models/user_token.dart';
+import 'package:zolder_app/services/auth_service.dart';
 
 import '../components/toast_manager.dart';
 import '../controller/auth_command.dart';
+import '../main.dart';
 
 class LoginPage extends StatefulWidget {
   final double? mainPadding;
@@ -36,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     _mainPadding = (widget.mainPadding) ?? _mainPadding;
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
+
 
   }
 
@@ -166,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
         .onError((error, stackTrace) {
       setState(() {
         _errorMessage = "Invalid User";
-        ToastManager.show(context,_errorMessage);
+        ToastManager.show(context, _errorMessage);
       });
       return UserToken.empty();
     });

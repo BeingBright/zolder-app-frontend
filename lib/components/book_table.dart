@@ -10,9 +10,11 @@ class BookTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        location.books.toString(),
+    return SingleChildScrollView(
+      child: Center(
+        child: Text(
+          location.books.toString(),
+        ),
       ),
     );
   }
