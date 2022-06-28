@@ -33,7 +33,7 @@ class _AdminPageState extends State<AdminPage> {
     Widget sidebar = Sidebar(children: [
       SidebarTile(
           title: "Locations",
-          icons: Icons.person,
+          icons: Icons.inventory_2_outlined,
           callback: () {
             _setCurrentPage("location");
           }),
