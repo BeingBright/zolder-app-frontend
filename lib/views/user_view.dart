@@ -61,7 +61,8 @@ class _UserViewState extends State<UserView> {
               onRefresh: () => UserCommand().getUsers(context),
               triggerMode: RefreshIndicatorTriggerMode.anywhere,
               child: GridView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 itemCount: userModel.users.length,
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 250,

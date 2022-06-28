@@ -9,6 +9,17 @@ class BookItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(book.bookId);
+    return MaterialButton(
+      color: Colors.red,
+      onPressed: () {
+        print(book);
+      },
+      onLongPress: () {
+        print("$book LONG BOI PRESS");
+      },
+      child: Text(
+        book.bookId,
+      ),
+    );
   }
 }

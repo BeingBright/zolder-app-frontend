@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zolder_app/components/book_item.dart';
 import 'package:zolder_app/models/location.dart';
-
-import '../models/book.dart';
 
 class BookTable extends StatelessWidget {
   const BookTable({Key? key, required this.location}) : super(key: key);
@@ -10,12 +9,17 @@ class BookTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Text(
-          location.books.toString(),
-        ),
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: location.books.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: location.rowCount ?? 1,
+        mainAxisExtent: 75,
+        childAspectRatio: 6,
       ),
+      itemBuilder: (ctx, index) {
+        return BookItem(book: location.books[index]);
+      },
     );
   }
 }
