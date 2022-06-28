@@ -17,6 +17,10 @@ class UserView extends StatefulWidget {
 }
 
 class _UserViewState extends State<UserView> {
+  void _onRefresh() {
+    UserCommand().getUsers(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +32,12 @@ class _UserViewState extends State<UserView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Users"),
+        actions: [
+          IconButton(
+            onPressed: _onRefresh,
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       drawer: widget.sidebar,
       floatingActionButton: FloatingActionButton(

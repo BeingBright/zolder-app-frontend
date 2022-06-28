@@ -75,7 +75,7 @@ class LocationModal extends StatelessWidget {
             ),
             TextFormField(
               autofocus: true,
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               keyboardType: TextInputType.number,
               controller: _columnController,
               autocorrect: false,
@@ -92,6 +92,18 @@ class LocationModal extends StatelessWidget {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
+              onEditingComplete: () {
+                Navigator.of(context, rootNavigator: true).pop(
+                  Location(
+                    null,
+                    int.parse(_rowController.text),
+                    int.parse(_columnController.text),
+                    "Celc",
+                    _inventoryController.text,
+                    [],
+                  ),
+                );
+              },
             )
           ],
         ),
