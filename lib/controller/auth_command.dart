@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zolder_app/main.dart';
 import 'package:zolder_app/mixins/encryption.dart';
 import 'package:zolder_app/mixins/get_provided.dart';
 import 'package:zolder_app/models/user_token.dart';
@@ -19,6 +20,7 @@ class AuthCommand with provider, encryption {
   AuthCommand._internal() {
     authService.onError(401, (body) {
       userTokenModel?.removeToken();
+      Navigator.pushReplacementNamed(HomePage.globalKey.currentContext!, "/");
     });
   }
 

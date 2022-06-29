@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:zolder_app/components/book/book_table.dart';
 import 'package:zolder_app/components/location/location_item.dart';
@@ -19,8 +22,11 @@ class LocationView extends StatefulWidget {
   State<LocationView> createState() => _LocationViewState();
 }
 
-class _LocationViewState extends State<LocationView> with provider {
+class _LocationViewState extends State<LocationView>
+    with provider, SingleTickerProviderStateMixin {
   List<LocationItem> locationItems = [];
+
+  late TabController _tabController;
 
   void _onRefresh() {
     _getLocations();
@@ -34,6 +40,10 @@ class _LocationViewState extends State<LocationView> with provider {
 
     addLocationModal.then((loc) => _addLocation(loc));
   }
+
+  void _onRemoveLocation() {}
+
+  void _onUpdateLocation() {}
 
   void _addLocation(Location? location) {
     if (location == null) return;
@@ -49,8 +59,11 @@ class _LocationViewState extends State<LocationView> with provider {
 
   @override
   void initState() {
-    super.initState();
     _getLocations();
+    Timer.periodic(const Duration(seconds: 15), (timer) {
+      _getLocations();
+    });
+    super.initState();
   }
 
   @override
@@ -70,13 +83,52 @@ class _LocationViewState extends State<LocationView> with provider {
               icon: const Icon(Icons.search),
             ),
             if (Provider.of<UserTokenModel>(context).userToken.role == "ADMIN")
-              IconButton(
-                onPressed: _onAddLocation,
-                icon: const Icon(Icons.add),
+              PopupMenuButton(
+                onSelected: (choise) {
+                  switch (choise) {
+                    case 'Add':
+                      _onAddLocation();
+                      break;
+                    case 'Update':
+                      _onUpdateLocation();
+                      break;
+                    case 'Remove':
+                      _onRemoveLocation();
+                      break;
+                    default:
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: "Add",
+                    child: ListTile(
+                      title: Text("Add Location"),
+                      leading: Icon(Icons.add),
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: "Update",
+                    child: ListTile(
+                      title: Text("Update Location"),
+                      leading: Icon(Icons.mode),
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: "Remove",
+                    child: ListTile(
+                      title: Text("Remove Location"),
+                      leading: Icon(Icons.delete),
+                    ),
+                  )
+                ],
               )
           ],
           bottom: TabBar(
-            padding: const EdgeInsets.all(8),
+            isScrollable: true,
+            padding: EdgeInsets.zero,
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             tabs: locationItems.map((locationItem) {
               return locationItem.title;
             }).toList(),

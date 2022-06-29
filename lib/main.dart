@@ -39,7 +39,6 @@ class HomePage extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      // home: const LoginPage(),
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginPage(),

@@ -36,7 +36,7 @@ class _BookItemState extends State<BookItem> {
   }
 
   void _onLongPress() {
-    var dialog = showDialog(
+    showDialog(
       context: context,
       builder: (ctx) {
         return BookAuditModal(
