@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:zolder_app/components/book/book_table.dart';
 import 'package:zolder_app/components/location/location_item.dart';
@@ -57,6 +60,9 @@ class _LocationViewState extends State<LocationView>
   @override
   void initState() {
     _getLocations();
+    Timer.periodic(const Duration(seconds: 15), (timer) {
+      _getLocations();
+    });
     super.initState();
   }
 
