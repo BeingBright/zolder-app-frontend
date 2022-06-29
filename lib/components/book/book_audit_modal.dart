@@ -9,16 +9,20 @@ class BookAuditModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Book Audit Log"),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text("Close"),
+    return Center(
+      child: SingleChildScrollView(
+        child: AlertDialog(
+          title: const Text("Book Audit Log"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Close"),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
