@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
+import 'package:zolder_app/components/sidebar.dart';
+import 'package:zolder_app/components/sidebar_tile.dart';
+import 'package:zolder_app/models/user_token_model.dart';
 import 'package:zolder_app/views/location_view.dart';
 import 'package:zolder_app/views/user_view.dart';
-
-import '../components/sidebar.dart';
-import '../components/sidebar_tile.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -13,89 +15,56 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
-  String currentRoute = "Users";
+  String currentPage = "location";
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (Provider.of<UserTokenModel>(context, listen: false).userToken.role !=
+          "ADMIN") {
+        Navigator.pushReplacementNamed(context, '/');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(currentRoute),
-      ),
-      drawer: Sidebar(
-        children: [
-          Theme(
-            data: getTheme(context, "Users"),
-            child: SidebarTile(
-              title: "Users",
-              icons: Icons.person,
-              callback: () {
-                setPage("Users");
-              },
-            ),
-          ),
-          Theme(
-            data: getTheme(context, "Location"),
-            child: SidebarTile(
-              title: "Location",
-              icons: Icons.inventory_2_outlined,
-              callback: () {
-                setPage("Location");
-              },
-            ),
-          ),
-        ],
-      ),
-      body: Navigator(
-        key: _navigatorKey,
-        initialRoute: currentRoute,
-        onGenerateRoute: _onGenerateRoute,
-      ), // const UserView(),
-    );
+    Widget sidebar = Sidebar(children: [
+      SidebarTile(
+          title: "Locations",
+          icons: Icons.inventory_2_outlined,
+          callback: () {
+            _setCurrentPage("location");
+          }),
+      SidebarTile(
+          title: "Users",
+          icons: Icons.person,
+          callback: () {
+            _setCurrentPage("user");
+          })
+    ]);
+
+    return _getCurrentPage(currentPage, sidebar);
   }
 
-  ThemeData getTheme(BuildContext context, String route) {
-    return (currentRoute == route)
-        ? ThemeData(
-            listTileTheme: ListTileThemeData(
-              tileColor: Theme.of(context).indicatorColor,
-            ),
-          )
-        : Theme.of(context);
+  void _setCurrentPage(String page) {
+    setState(() {
+      currentPage = page;
+    });
   }
 
-  void setPage(String route) {
-    if (currentRoute != route) {
-      _navigatorKey.currentState!.pushNamed(route);
-      setState(() {
-        currentRoute = route;
-      });
-    }
-    Navigator.pop(context);
-  }
-
-  Route _onGenerateRoute(RouteSettings settings) {
-    late Widget page;
-
-    switch (settings.name) {
-      case "Users":
-        page = const UserView();
-
-        break;
-      case "Location":
-        page = const LocationView();
-        break;
-
+  Widget _getCurrentPage(String page, Widget sidebar) {
+    switch (page) {
+      case 'user':
+        return UserView(sidebar: sidebar);
+      case 'location':
+        return LocationView(sidebar: sidebar);
       default:
-        page = const UserView();
+        return Center(
+          child: Text("OOPS"),
+        );
         break;
     }
-
-    return MaterialPageRoute<dynamic>(
-      builder: (context) {
-        return page;
-      },
-      settings: settings,
-    );
   }
 }

@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/components/user_card.dart';
-import 'package:zolder_app/components/user_modal.dart';
+import 'package:zolder_app/components/user/user_card.dart';
 
+import '../components/user/user_modal.dart';
 import '../controller/user_command.dart';
 import '../models/user.dart';
 import '../models/user_model.dart';
 
 class UserView extends StatefulWidget {
-  const UserView({Key? key}) : super(key: key);
+  const UserView({Key? key, required this.sidebar}) : super(key: key);
+
+  final Widget sidebar;
 
   @override
   State<UserView> createState() => _UserViewState();
 }
 
 class _UserViewState extends State<UserView> {
+  void _onRefresh() {
+    UserCommand().getUsers(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +30,16 @@ class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Users"),
+        actions: [
+          IconButton(
+            onPressed: _onRefresh,
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      drawer: widget.sidebar,
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             UserCommand().getUsers(context);
@@ -45,7 +61,8 @@ class _UserViewState extends State<UserView> {
               onRefresh: () => UserCommand().getUsers(context),
               triggerMode: RefreshIndicatorTriggerMode.anywhere,
               child: GridView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 itemCount: userModel.users.length,
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 250,

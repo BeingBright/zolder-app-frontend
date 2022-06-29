@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 import 'package:zolder_app/models/user_token.dart';
+import 'package:zolder_app/services/auth_service.dart';
 
 import '../components/toast_manager.dart';
 import '../controller/auth_command.dart';
@@ -31,6 +31,8 @@ class _LoginPageState extends State<LoginPage> {
   double _elementPadding = 16;
   double _elementSize = 350;
 
+  late AuthCommand authCommand;
+
   @override
   void initState() {
     super.initState();
@@ -38,11 +40,12 @@ class _LoginPageState extends State<LoginPage> {
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
 
+    authCommand = AuthCommand();
   }
 
   @override
   Widget build(BuildContext context) {
-    AuthCommand().setUserModel(context);
+    authCommand.setUserModel(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -131,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(),
                     labelText: "Password",
                   ),
-                  onEditingComplete: () => loginUser(),
+                  onEditingComplete: loginUser,
                 ),
               ),
             ],
@@ -150,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: EdgeInsets.all(_elementPadding),
           child: ElevatedButton(
-            onPressed: () => loginUser(),
+            onPressed: loginUser,
             child: Padding(
               padding: EdgeInsets.all(_elementPadding),
               child: const Text("Log in"),
@@ -162,12 +165,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginUser() {
-    AuthCommand()
+    authCommand
         .loginUser(context, _usernameController.text, _passwordController.text)
         .onError((error, stackTrace) {
       setState(() {
         _errorMessage = "Invalid User";
-        ToastManager.show(context,_errorMessage);
+        ToastManager.show(context, _errorMessage);
       });
       return UserToken.empty();
     });

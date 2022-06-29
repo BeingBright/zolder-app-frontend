@@ -1,4 +1,5 @@
 import 'package:zolder_app/mixins/get_provided.dart';
+import 'package:zolder_app/models/book.dart';
 import 'package:zolder_app/services/location_service.dart';
 
 import '../models/location.dart';
@@ -18,5 +19,16 @@ class LocationCommand with provider {
 
   Future<List<Location>> getLocationsByBuilding(String buildingLoc) {
     return locationService.getLocationsByBuilding(buildingLoc);
+  }
+
+  Future addLocation(Location location) {
+    Future result = locationService.addLocation(location);
+
+    return result;
+  }
+
+  Future updateBook(Book book) {
+    Future result = locationService.updateBook(book);
+    return result;
   }
 }

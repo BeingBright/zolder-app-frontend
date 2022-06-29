@@ -5,6 +5,7 @@ class APIConfiguration {
   static const String location = "$restApiUrl/location";
   static const String auth = "$restApiUrl/auth";
   static const String locationAuth = "$location/audit";
+  static const String book = "$restApiUrl/book";
 
   static const String stompSocketUrl = "ws://brightonvandenend.nl:8050/zolder/stomp";
   // static const String stompSocketUrl = "ws://localhost:7000/zolder/stomp";
