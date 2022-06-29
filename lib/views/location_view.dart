@@ -119,6 +119,7 @@ class _LocationViewState extends State<LocationView>
               )
           ],
           bottom: TabBar(
+            isScrollable: true,
             padding: EdgeInsets.zero,
             physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()),

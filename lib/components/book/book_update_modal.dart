@@ -58,7 +58,7 @@ class BookUpdateModal extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 controller: _bookIdController,
                 autocorrect: false,
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: "Inventory Name",

@@ -33,12 +33,12 @@ class LocationModal extends StatelessWidget {
                 child: const Text("Add"))
           ],
           content: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   autofocus: true,
                   textInputAction: TextInputAction.next,
                   controller: _inventoryController,
@@ -56,10 +56,11 @@ class LocationModal extends StatelessWidget {
                   },
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   autofocus: true,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
-                  controller: _rowController,
+                  controller: _columnController,
                   autocorrect: false,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -76,10 +77,11 @@ class LocationModal extends StatelessWidget {
                   ],
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   autofocus: true,
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.number,
-                  controller: _columnController,
+                  controller: _rowController,
                   autocorrect: false,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
