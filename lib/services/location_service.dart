@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:zolder_app/models/book.dart';
 import 'package:zolder_app/models/location.dart';
 
 import '../configuration/api_configuration.dart';
@@ -44,7 +45,7 @@ class LocationService {
     ));
   }
 
-  Future addLocation(Location location) async{
+  Future addLocation(Location location) async {
     return await controller.post(APIConfiguration.location,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -57,5 +58,15 @@ class LocationService {
     return List<Location>.from(json.map((e) {
       return Location.fromJson(e);
     }));
+  }
+
+  Future updateBook(Book book) async {
+    print(book);
+    return await controller.put(APIConfiguration.book,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: AuthService().token.token,
+        },
+        body: book);
   }
 }

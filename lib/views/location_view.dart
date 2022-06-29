@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zolder_app/components/book_table.dart';
+import 'package:zolder_app/components/book/book_table.dart';
 import 'package:zolder_app/components/location/location_item.dart';
 import 'package:zolder_app/components/location/location_modal.dart';
 import 'package:zolder_app/components/toast_manager.dart';
