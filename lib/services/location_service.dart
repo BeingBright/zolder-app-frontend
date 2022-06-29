@@ -61,7 +61,6 @@ class LocationService {
   }
 
   Future updateBook(Book book) async {
-    print(book);
     return await controller.put(APIConfiguration.book,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

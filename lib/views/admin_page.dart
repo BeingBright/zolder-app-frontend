@@ -61,10 +61,9 @@ class _AdminPageState extends State<AdminPage> {
       case 'location':
         return LocationView(sidebar: sidebar);
       default:
-        return Center(
+        return const Center(
           child: Text("OOPS"),
         );
-        break;
     }
   }
 }

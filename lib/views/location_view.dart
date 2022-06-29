@@ -35,6 +35,10 @@ class _LocationViewState extends State<LocationView> with provider {
     addLocationModal.then((loc) => _addLocation(loc));
   }
 
+  void _onRemoveLocation() {}
+
+  void _onUpdateLocation() {}
+
   void _addLocation(Location? location) {
     if (location == null) return;
     Future result = LocationCommand().addLocation(location);
@@ -70,9 +74,45 @@ class _LocationViewState extends State<LocationView> with provider {
               icon: const Icon(Icons.search),
             ),
             if (Provider.of<UserTokenModel>(context).userToken.role == "ADMIN")
-              IconButton(
-                onPressed: _onAddLocation,
-                icon: const Icon(Icons.add),
+              PopupMenuButton(
+                onSelected: (choise) {
+                  switch (choise) {
+                    case 'Add':
+                      _onAddLocation();
+                      break;
+                    case 'Update':
+                      _onUpdateLocation();
+                      break;
+                    case 'Remove':
+                      _onRemoveLocation();
+                      break;
+                    default:
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: "Add",
+                    child: ListTile(
+                      title: Text("Add Location"),
+                      leading: Icon(Icons.add),
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: "Update",
+                    child: ListTile(
+                      title: Text("Update Location"),
+                      leading: Icon(Icons.mode),
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: "Remove",
+                    child: ListTile(
+                      title: Text("Remove Location"),
+                      leading: Icon(Icons.delete),
+                    ),
+                  )
+                ],
               )
           ],
           bottom: TabBar(

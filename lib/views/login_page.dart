@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:zolder_app/models/user_token.dart';
-import 'package:zolder_app/services/auth_service.dart';
 
 import '../components/toast_manager.dart';
 import '../controller/auth_command.dart';
