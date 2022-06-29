@@ -19,8 +19,11 @@ class LocationView extends StatefulWidget {
   State<LocationView> createState() => _LocationViewState();
 }
 
-class _LocationViewState extends State<LocationView> with provider {
+class _LocationViewState extends State<LocationView>
+    with provider, SingleTickerProviderStateMixin {
   List<LocationItem> locationItems = [];
+
+  late TabController _tabController;
 
   void _onRefresh() {
     _getLocations();
@@ -53,8 +56,8 @@ class _LocationViewState extends State<LocationView> with provider {
 
   @override
   void initState() {
-    super.initState();
     _getLocations();
+    super.initState();
   }
 
   @override
@@ -116,7 +119,9 @@ class _LocationViewState extends State<LocationView> with provider {
               )
           ],
           bottom: TabBar(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.zero,
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             tabs: locationItems.map((locationItem) {
               return locationItem.title;
             }).toList(),
