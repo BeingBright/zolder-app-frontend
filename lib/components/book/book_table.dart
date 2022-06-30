@@ -29,7 +29,6 @@ class BookTable extends StatefulWidget {
 class _BookTableState extends State<BookTable> {
   @override
   Widget build(BuildContext context) {
-    print("hehehehehehehehehehehehehe");
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: StickyHeadersTable(
@@ -37,9 +36,7 @@ class _BookTableState extends State<BookTable> {
         rowsLength: widget.location.columnCount!,
         columnsLength: widget.location.rowCount!,
         legendCell: Text(widget.location.inventoryLocation!),
-        onContentCellPressed: (i,j){
-
-        },
+        onContentCellPressed: (i, j) {},
         columnsTitleBuilder: (int columnIndex) => Text("Rij $columnIndex"),
         rowsTitleBuilder: (int rowIndex) => Text("$rowIndex"),
         cellDimensions: const CellDimensions.fixed(
