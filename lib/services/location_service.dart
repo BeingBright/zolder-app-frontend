@@ -26,6 +26,7 @@ class LocationService {
   }
 
   Future<List<Location>> getLocations() async {
+    if (AuthService().token.token.isEmpty) return [];
     return locationFromJson(await controller.get(
       APIConfiguration.location,
       headers: {
@@ -36,6 +37,7 @@ class LocationService {
   }
 
   Future<List<Location>> getLocationsByBuilding(String buildingLoc) async {
+    if (AuthService().token.token.isEmpty) return [];
     return locationFromJson(await controller.get(
       "${APIConfiguration.location}/location/$buildingLoc",
       headers: {
@@ -55,6 +57,7 @@ class LocationService {
   }
 
   List<Location> locationFromJson(List json) {
+    if (json.isEmpty) return [];
     return List<Location>.from(json.map((e) {
       return Location.fromJson(e);
     }));

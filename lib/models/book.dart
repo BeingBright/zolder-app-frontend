@@ -25,7 +25,7 @@ class Book {
 
   @override
   String toString() {
-    return 'Book{id: $id, row: $row, column: $column, bookId: $bookId}';
+    return 'Book{row: $row, column: $column, bookId: $bookId}';
   }
 
   @override

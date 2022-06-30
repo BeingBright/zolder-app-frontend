@@ -21,7 +21,7 @@ class BookAuditModal extends StatelessWidget {
               child: const Text("Close"),
             ),
           ],
-          content: Text("An User Audit log"),
+          content: const Text("An User Audit log"),
         ),
       ),
     );
