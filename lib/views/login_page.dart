@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:zolder_app/models/user/auth_token.dart';
 import 'package:zolder_app/services/auth_service.dart';
+
+import '../model/user/auth_token.dart';
 
 class LoginPage extends StatefulWidget {
   final double? mainPadding;
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       
     });
     t.onError((error, stackTrace) {
-      _errorMessage
+      _errorMessage="";
       return AuthToken.empty();
     });
   }
