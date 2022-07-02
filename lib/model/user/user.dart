@@ -12,9 +12,11 @@ class User {
   UserRole role = UserRole.none;
   bool isActive = true;
 
+  bool rememberMe = false;
+
   User(this.id, this.username, this.password, this.role, this.isActive);
 
-  User.login(this.username, this.password);
+  User.login(this.username, this.password, this.rememberMe);
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -22,14 +24,16 @@ class User {
         password = json['password'],
         role = UserRole.values
             .firstWhere((e) => e.toString().toUpperCase() == json['role']),
-        isActive = json['active'];
+        isActive = json['active'],
+        rememberMe = json['rememberMe'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': username,
         'password': password,
         'role': role.name.toUpperCase(),
-        'active': isActive
+        'active': isActive,
+        'rememberMe': rememberMe
       };
 
   static List<User> generateList(List json) {
@@ -40,7 +44,7 @@ class User {
 
   @override
   String toString() {
-    return 'User{id: $id, username: $username, password: $password, type: $role}';
+    return 'User{id: $id, username: $username, password: $password, role: $role, isActive: $isActive, rememberMe: $rememberMe}';
   }
 
   @override
