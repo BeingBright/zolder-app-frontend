@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
 import 'package:zolder_app/services/api_controller.dart';
+import 'package:zolder_app/services/audit_service.dart';
 import 'package:zolder_app/services/auth_service.dart';
+import 'package:zolder_app/services/book_service.dart';
+import 'package:zolder_app/services/location_service.dart';
+import 'package:zolder_app/services/user_service.dart';
 import 'package:zolder_app/views/admin_page.dart';
 import 'package:zolder_app/views/login_page.dart';
 import 'package:zolder_app/views/office_page.dart';
@@ -28,8 +32,13 @@ void _setupGetIt() {
   // Models
   getIt.registerSingleton<AuthTokenModel>(AuthTokenModel());
   // Services
-  getIt.registerSingleton<AuthService>(AuthService());
   getIt.registerSingleton<APIController>(APIController());
+
+  getIt.registerSingleton<AuthService>(AuthService());
+  getIt.registerSingleton<UserService>(UserService());
+  getIt.registerSingleton<LocationService>(LocationService());
+  getIt.registerSingleton<BookService>(BookService());
+  getIt.registerSingleton<AuditService>(AuditService());
 }
 
 class HomePage extends StatelessWidget {

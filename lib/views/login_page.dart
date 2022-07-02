@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:zolder_app/main.dart';
 import 'package:zolder_app/model/user/user.dart';
+import 'package:zolder_app/services/api_controller.dart';
 import 'package:zolder_app/services/auth_service.dart';
 
 import '../model/user/auth_token.dart';
@@ -60,6 +62,10 @@ class _LoginPageState extends State<LoginPage> {
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
     getIt<AuthService>().loadToken().then((value) => _loadPage(value));
+    getIt<APIController>().addOnStatusCallback(401, (body) {
+      getIt<AuthService>().clearToken();
+      Navigator.pushReplacementNamed(HomePage.globalKey.currentContext!, '/');
+    });
   }
 
   @override
@@ -153,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Password",
                     ),
                     onEditingComplete: _loginUser,
+
                   ),
                 ),
                 Padding(

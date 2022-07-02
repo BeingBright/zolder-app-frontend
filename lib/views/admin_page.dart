@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get_it/get_it.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
 import 'package:zolder_app/model/user/user.dart';
+import 'package:zolder_app/views/location_view.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -27,6 +28,6 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Admin Page");
+    return LocationView();
   }
 }

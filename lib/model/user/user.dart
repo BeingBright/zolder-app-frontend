@@ -23,7 +23,7 @@ class User {
         username = json['username'],
         password = json['password'],
         role = UserRole.values
-            .firstWhere((e) => e.toString().toUpperCase() == json['role']),
+            .firstWhere((e) => e.name.toString().toUpperCase() == json['role']),
         isActive = json['active'],
         rememberMe = json['rememberMe'];
 

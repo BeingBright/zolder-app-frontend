@@ -39,6 +39,7 @@ class AuthService {
       headers: APIConfiguration.baseHeader,
     );
     AuthTokenModel tm = getIt<AuthTokenModel>();
+    clearToken();
     tm.clearToken();
     return tm.authToken;
   }

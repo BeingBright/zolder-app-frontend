@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/services/user_service.dart';
 
 class LocationView extends StatefulWidget {
   const LocationView({Key? key}) : super(key: key);
@@ -8,6 +10,8 @@ class LocationView extends StatefulWidget {
 }
 
 class _LocationViewState extends State<LocationView> {
+  GetIt getIt = GetIt.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,12 +20,10 @@ class _LocationViewState extends State<LocationView> {
         title: const Text("Location"),
       ),
       body: FutureBuilder(
-        future: Future.delayed(Duration(seconds: 2),() {
-          return "";
-        }),
+        future: getIt<UserService>().getUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const Text("data");
+            return Text(snapshot.data.toString());
           } else if (snapshot.hasError) {
             return const Text("error");
           }

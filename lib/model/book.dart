@@ -23,6 +23,12 @@ class Book {
         'bookId': bookId,
       };
 
+  static List<Book> generateList(List json) {
+    return List<Book>.from(json.map((e) {
+      return Book.fromJson(e);
+    }));
+  }
+
   @override
   String toString() {
     return 'Book{row: $row, column: $column, bookId: $bookId}';
