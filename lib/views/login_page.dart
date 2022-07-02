@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app/models/user_token.dart';
-
-import '../components/toast_manager.dart';
-import '../controller/auth_command.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/models/user/auth_token.dart';
+import 'package:zolder_app/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final double? mainPadding;
@@ -29,8 +28,19 @@ class _LoginPageState extends State<LoginPage> {
   double _mainPadding = 16;
   double _elementPadding = 16;
   double _elementSize = 350;
+  GetIt getIt = GetIt.instance;
 
-  late AuthCommand authCommand;
+  void _loginUser() {
+    var t = getIt<AuthService>()
+        .login(_usernameController.text, _passwordController.text);
+    t.then((value) {
+      
+    });
+    t.onError((error, stackTrace) {
+      _errorMessage
+      return AuthToken.empty();
+    });
+  }
 
   @override
   void initState() {
@@ -38,13 +48,10 @@ class _LoginPageState extends State<LoginPage> {
     _mainPadding = (widget.mainPadding) ?? _mainPadding;
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
-
-    authCommand = AuthCommand();
   }
 
   @override
   Widget build(BuildContext context) {
-    authCommand.setUserModel(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -133,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(),
                     labelText: "Password",
                   ),
-                  onEditingComplete: loginUser,
+                  onEditingComplete: _loginUser,
                 ),
               ),
             ],
@@ -152,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: EdgeInsets.all(_elementPadding),
           child: ElevatedButton(
-            onPressed: loginUser,
+            onPressed: _loginUser,
             child: Padding(
               padding: EdgeInsets.all(_elementPadding),
               child: const Text("Log in"),
@@ -161,17 +168,5 @@ class _LoginPageState extends State<LoginPage> {
         )
       ],
     );
-  }
-
-  void loginUser() {
-    authCommand
-        .loginUser(context, _usernameController.text, _passwordController.text)
-        .onError((error, stackTrace) {
-      setState(() {
-        _errorMessage = "Invalid User";
-        ToastManager.show(context, _errorMessage);
-      });
-      return UserToken.empty();
-    });
   }
 }
