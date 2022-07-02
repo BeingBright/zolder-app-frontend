@@ -103,38 +103,21 @@ class APIController {
   }
 
   void _onConnect(StompFrame frame) {
-    print(frame.headers);
-    print(frame.body);
-    print(frame.command);
-
-
     onConnect?.call();
     stompClient.subscribe(
         destination: '/topic/user',
         callback: (f) {
-          print(f.headers);
-          print(f.body);
-          print(f.command);
           onUser?.call();
-          print('USER: ${f.body.toString()}');
         });
     stompClient.subscribe(
         destination: '/topic/book',
         callback: (f) {
-          print(f.headers);
-          print(f.body);
-          print(f.command);
           onBook?.call();
-          print('BOOK: ${f.toString()}');
         });
     stompClient.subscribe(
         destination: '/topic/location',
         callback: (f) {
-          print(f.headers);
-          print(f.body);
-          print(f.command);
           onLoc?.call();
-          print('LOCATION: ${f.toString()}');
         });
   }
 
