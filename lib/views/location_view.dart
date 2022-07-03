@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:zolder_app/component/book_table.dart';
 import 'package:zolder_app/model/location_model.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
 import 'package:zolder_app/model/user/user.dart';
@@ -41,6 +42,7 @@ class _LocationViewState extends State<LocationView> {
     super.initState();
     _getLocation();
     getIt<APIController>().onLoc = _getLocation;
+    getIt<APIController>().onBook = _getLocation;
   }
 
   @override
@@ -115,9 +117,10 @@ class _LocationViewState extends State<LocationView> {
                 ),
         ),
         body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             children: getIt<LocationModel>()
                 .locations
-                .map((e) => Text(e.toString()))
+                .map((e) => BookTable(location: e))
                 .toList()),
       ),
     );
