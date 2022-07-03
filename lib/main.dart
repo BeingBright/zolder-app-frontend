@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:zolder_app/model/location_model.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
 import 'package:zolder_app/services/api_controller.dart';
 import 'package:zolder_app/services/audit_service.dart';
@@ -31,6 +32,7 @@ void _setupGetIt() {
   GetIt getIt = GetIt.instance;
   // Models
   getIt.registerSingleton<AuthTokenModel>(AuthTokenModel());
+  getIt.registerSingleton<LocationModel>(LocationModel());
   // Services
   getIt.registerSingleton<APIController>(APIController());
 

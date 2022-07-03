@@ -20,10 +20,10 @@ class APIController {
 
   late final StompClient stompClient;
 
-  Function? onConnect;
-  Function? onLoc;
-  Function? onUser;
-  Function? onBook;
+  Function(StompFrame f)? onConnect;
+  Function()? onLoc;
+  Function()? onUser;
+  Function()? onBook;
 
   APIController._internal() {
     stompClient = StompClient(
@@ -103,7 +103,7 @@ class APIController {
   }
 
   void _onConnect(StompFrame frame) {
-    onConnect?.call();
+    onConnect?.call(frame);
     stompClient.subscribe(
         destination: '/topic/user',
         callback: (f) {
