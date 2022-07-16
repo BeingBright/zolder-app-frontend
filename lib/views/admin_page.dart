@@ -29,7 +29,7 @@ class _AdminPageState extends State<AdminPage> {
   @override
   void initState() {
     super.initState();
-    currentPage = userRoute;
+    currentPage = locationRoute;
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (getIt<AuthTokenModel>().authToken.role != UserRole.admin) {
         Navigator.pushReplacementNamed(context, '/');

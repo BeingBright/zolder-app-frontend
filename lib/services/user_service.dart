@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:get_it/get_it.dart';
 import 'package:zolder_app/configuration/api_configuration.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
@@ -30,6 +32,7 @@ class UserService {
   }
 
   Future<User> addUser(User user) async {
+    user.password = encrypt(user.password ?? "");
     return User.fromJson(await getIt<APIController>().post(
       APIConfiguration.user,
       headers: {
@@ -41,6 +44,7 @@ class UserService {
   }
 
   Future<User> updateUser(User user) async {
+    user.password = encrypt(user.password ?? "");
     return User.fromJson(await getIt<APIController>().put(
       APIConfiguration.user,
       headers: {
@@ -60,5 +64,9 @@ class UserService {
       },
       body: user,
     ));
+  }
+
+  String encrypt(String msg) {
+    return sha512.convert(utf8.encode(msg)).toString();
   }
 }
