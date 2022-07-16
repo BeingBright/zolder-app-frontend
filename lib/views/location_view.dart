@@ -1,77 +1,73 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
-import 'package:zolder_app/components/book/book_table.dart';
-import 'package:zolder_app/components/location/location_item.dart';
-import 'package:zolder_app/components/location/location_modal.dart';
-import 'package:zolder_app/components/toast_manager.dart';
-import 'package:zolder_app/controller/location_command.dart';
-import 'package:zolder_app/mixins/get_provided.dart';
-import 'package:zolder_app/models/location.dart';
-import 'package:zolder_app/models/location_model.dart';
-import 'package:zolder_app/models/user_token_model.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/component/book_table.dart';
+import 'package:zolder_app/component/location_add_modal.dart';
+import 'package:zolder_app/component/sidebar.dart';
+import 'package:zolder_app/model/location_model.dart';
+import 'package:zolder_app/model/user/auth_token.dart';
+import 'package:zolder_app/model/user/user.dart';
+import 'package:zolder_app/services/api_controller.dart';
+import 'package:zolder_app/services/location_service.dart';
 
 class LocationView extends StatefulWidget {
-  const LocationView({Key? key, required this.sidebar}) : super(key: key);
+  LocationView({Key? key, this.children}) : super(key: key);
 
-  final Widget sidebar;
+  final List<Widget>? children;
+
+  final GetIt getIt = GetIt.instance;
 
   @override
   State<LocationView> createState() => _LocationViewState();
 }
 
-class _LocationViewState extends State<LocationView>
-    with provider, SingleTickerProviderStateMixin {
-  List<LocationItem> locationItems = [];
-
-  late TabController _tabController;
-
+class _LocationViewState extends State<LocationView> {
   void _onRefresh() {
-    _getLocations();
+    _getLocation();
   }
 
   void _onAddLocation() {
     var addLocationModal = showDialog(
       context: context,
-      builder: (context) => LocationModal(),
+      builder: (context) => LocationAddModal(),
     );
 
-    addLocationModal.then((loc) => _addLocation(loc));
+    addLocationModal.then((loc) {
+      if (loc == null) return;
+      Future result = widget.getIt<LocationService>().addLocation(loc);
+      result.onError((error, stackTrace) => {});
+    });
   }
 
   void _onRemoveLocation() {}
 
   void _onUpdateLocation() {}
 
-  void _addLocation(Location? location) {
-    if (location == null) return;
-    Future result = LocationCommand().addLocation(location);
-    result.then((value) => _getLocations());
-    result.onError((error, stackTrace) => {
-          ToastManager.show(context,
-              "Location: '${location.inventoryLocation}' already exists")
-        });
-  }
-
   void _onSearch() {}
+
+  void _getLocation() async {
+    var locFut = await widget.getIt<LocationService>().getLocations();
+    setState(() {
+      widget.getIt<LocationModel>().setLocations(locFut);
+    });
+  }
 
   @override
   void initState() {
-    _getLocations();
-    Timer.periodic(const Duration(seconds: 15), (timer) {
-      _getLocations();
-    });
+    _getLocation();
+    widget.getIt<APIController>().onLoc = _getLocation;
+    widget.getIt<APIController>().onBook = _getLocation;
+    widget.getIt<APIController>().onUser = null;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: locationItems.length,
+      length: widget.getIt<LocationModel>().locations.length,
       child: Scaffold(
+        drawer: Sidebar(children: widget.children),
         appBar: AppBar(
+          automaticallyImplyLeading: true,
           title: const Text("Location"),
           actions: [
             IconButton(
@@ -82,7 +78,7 @@ class _LocationViewState extends State<LocationView>
               onPressed: _onSearch,
               icon: const Icon(Icons.search),
             ),
-            if (Provider.of<UserTokenModel>(context).userToken.role == "ADMIN")
+            if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.admin)
               PopupMenuButton(
                 onSelected: (choise) {
                   switch (choise) {
@@ -122,50 +118,29 @@ class _LocationViewState extends State<LocationView>
                     ),
                   )
                 ],
-              )
+              ),
           ],
-          bottom: TabBar(
-            isScrollable: true,
-            padding: EdgeInsets.zero,
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            tabs: locationItems.map((locationItem) {
-              return locationItem.title;
-            }).toList(),
-          ),
+          bottom: (widget.getIt<LocationModel>().locations.isEmpty)
+              ? null
+              : TabBar(
+                  tabs: widget
+                      .getIt<LocationModel>()
+                      .locations
+                      .map((e) => Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(e.inventoryLocation ?? ""),
+                          ))
+                      .toList(),
+                ),
         ),
-        drawer: widget.sidebar,
-        body: Consumer<LocationModel>(
-          builder: (context, locationModel, child) {
-            return TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: locationItems.map((locationItem) {
-                return locationItem.body;
-              }).toList(),
-            );
-          },
-        ),
+        body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            children: widget
+                .getIt<LocationModel>()
+                .locations
+                .map((e) => BookTable(location: e))
+                .toList()),
       ),
     );
-  }
-
-  Future _getLocations() {
-    return LocationCommand().getLocationsByBuilding("Celc").then((locations) {
-      getProvided<LocationModel>(context).setLocations(locations);
-      setState(() {
-        locationItems = locations.map((loc) {
-          return LocationItem(
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(loc.inventoryLocation!),
-              ),
-              _buildTabBody(loc));
-        }).toList();
-      });
-    });
-  }
-
-  Widget _buildTabBody(Location location) {
-    return BookTable(location: location);
   }
 }

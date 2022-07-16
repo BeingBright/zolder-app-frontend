@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../controller/auth_command.dart';
-import '../models/user_token_model.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/model/user/auth_token.dart';
+import 'package:zolder_app/services/auth_service.dart';
 
 class Sidebar extends StatelessWidget {
-  const Sidebar({Key? key, required this.children}) : super(key: key);
+  Sidebar({Key? key, this.children}) : super(key: key);
 
-  final List<Widget> children;
+  final GetIt getIt = GetIt.instance;
+
+  final List<Widget>? children;
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-
     return Drawer(
       child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         child: Container(
           constraints: BoxConstraints(
             minHeight: MediaQuery.of(context).size.height,
@@ -34,14 +35,15 @@ class Sidebar extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          Provider.of<UserTokenModel>(context).userToken.user,
+                          getIt<AuthTokenModel>().authToken.user,
                           style: theme.primaryTextTheme.headline4,
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          Provider.of<UserTokenModel>(context)
-                              .userToken
+                          getIt<AuthTokenModel>()
+                              .authToken
                               .role
+                              .name
                               .toLowerCase(),
                           textAlign: TextAlign.center,
                           style: theme.primaryTextTheme.headline6,
@@ -51,8 +53,8 @@ class Sidebar extends StatelessWidget {
                   ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: children,
-                  ),
+                    children: children ?? [],
+                  )
                 ],
               ),
               Column(
@@ -72,8 +74,9 @@ class Sidebar extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, '/');
-                      AuthCommand().logoutUser(context);
+                      var t = getIt<AuthService>().logout();
+                      t.then((value) =>
+                          Navigator.pushReplacementNamed(context, '/'));
                     },
                   ),
                 ],

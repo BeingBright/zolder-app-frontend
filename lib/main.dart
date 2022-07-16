@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:zolder_app/components/toast_manager.dart';
-import 'package:zolder_app/models/location_model.dart';
-import 'package:zolder_app/models/user_token_model.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/model/location_model.dart';
+import 'package:zolder_app/model/user/auth_token.dart';
+import 'package:zolder_app/model/user/user_model.dart';
+import 'package:zolder_app/services/api_controller.dart';
+import 'package:zolder_app/services/audit_service.dart';
+import 'package:zolder_app/services/auth_service.dart';
+import 'package:zolder_app/services/book_service.dart';
+import 'package:zolder_app/services/location_service.dart';
+import 'package:zolder_app/services/user_service.dart';
 import 'package:zolder_app/views/admin_page.dart';
 import 'package:zolder_app/views/login_page.dart';
 import 'package:zolder_app/views/office_page.dart';
 import 'package:zolder_app/views/worker_page.dart';
 
-import 'models/user_model.dart';
-
-//
 void main() {
+  _setupGetIt();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => UserTokenModel()),
-        ChangeNotifierProvider(create: (context) => UserModel()),
-        ChangeNotifierProvider(create: (context) => LocationModel())
-      ],
-      child: const HomePage(),
-    ),
+    const HomePage(),
   );
+}
+
+void _setupGetIt() {
+  GetIt getIt = GetIt.instance;
+  // Models
+  getIt.registerSingleton<AuthTokenModel>(AuthTokenModel());
+  getIt.registerSingleton<LocationModel>(LocationModel());
+  getIt.registerSingleton<UserModel>(UserModel());
+  // Services
+  getIt.registerSingleton<APIController>(APIController());
+  getIt.registerSingleton<AuthService>(AuthService());
+  getIt.registerSingleton<UserService>(UserService());
+  getIt.registerSingleton<LocationService>(LocationService());
+  getIt.registerSingleton<BookService>(BookService());
+  getIt.registerSingleton<AuditService>(AuditService());
 }
 
 class HomePage extends StatelessWidget {
@@ -31,7 +43,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ToastManager.init(context);
     return MaterialApp(
       navigatorKey: globalKey,
       title: 'Zolder',

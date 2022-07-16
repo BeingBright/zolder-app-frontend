@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app/models/user_token.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/main.dart';
+import 'package:zolder_app/model/user/user.dart';
+import 'package:zolder_app/services/api_controller.dart';
+import 'package:zolder_app/services/auth_service.dart';
 
-import '../components/toast_manager.dart';
-import '../controller/auth_command.dart';
+import '../model/user/auth_token.dart';
 
 class LoginPage extends StatefulWidget {
   final double? mainPadding;
@@ -26,11 +29,33 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  var rememberMe = false;
+
   double _mainPadding = 16;
   double _elementPadding = 16;
   double _elementSize = 350;
+  GetIt getIt = GetIt.instance;
 
-  late AuthCommand authCommand;
+  void _loadPage(AuthToken token) {
+    if (token.role == UserRole.none) {
+    } else {
+      Navigator.pushReplacementNamed(context, '/${token.role.name.toString()}');
+    }
+  }
+
+  void _loginUser() {
+    var t = getIt<AuthService>()
+        .login(_usernameController.text, _passwordController.text, rememberMe);
+    t.then((value) {
+      _loadPage(value);
+    });
+    t.onError((error, stackTrace) {
+      setState(() {
+        _errorMessage = "Invalid User";
+      });
+      return AuthToken.empty();
+    });
+  }
 
   @override
   void initState() {
@@ -38,13 +63,15 @@ class _LoginPageState extends State<LoginPage> {
     _mainPadding = (widget.mainPadding) ?? _mainPadding;
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
-
-    authCommand = AuthCommand();
+    getIt<AuthService>().loadToken().then((value) => _loadPage(value));
+    getIt<APIController>().addOnStatusCallback(401, (body) {
+      getIt<AuthService>().clearToken();
+      Navigator.pushReplacementNamed(HomePage.globalKey.currentContext!, '/');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    authCommand.setUserModel(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -98,46 +125,65 @@ class _LoginPageState extends State<LoginPage> {
           key: _formKey,
           onDisposeAction: AutofillContextAction.commit,
           child: Form(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(_elementPadding),
-                child: TextFormField(
-                  textInputAction: TextInputAction.next,
-                  autofocus: true,
-                  controller: _usernameController,
-                  autofillHints: const [AutofillHints.username],
-                  keyboardType: TextInputType.name,
-                  onTap: () => _usernameController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: _usernameController.value.text.length),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Username",
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(_elementPadding),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.next,
+                    autofocus: true,
+                    controller: _usernameController,
+                    autofillHints: const [AutofillHints.username],
+                    keyboardType: TextInputType.name,
+                    onTap: () => _usernameController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _usernameController.value.text.length),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Username",
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(_elementPadding),
-                child: TextFormField(
-                  textInputAction: TextInputAction.done,
-                  controller: _passwordController,
-                  autofillHints: const [AutofillHints.password],
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  onTap: () => _passwordController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: _passwordController.value.text.length),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Password",
+                Padding(
+                  padding: EdgeInsets.all(_elementPadding),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.done,
+                    controller: _passwordController,
+                    autofillHints: const [AutofillHints.password],
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    onTap: () => _passwordController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _passwordController.value.text.length),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Password",
+                    ),
+                    onEditingComplete: _loginUser,
                   ),
-                  onEditingComplete: loginUser,
                 ),
-              ),
-            ],
-          )),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: _elementPadding),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        activeColor:
+                            Theme.of(context).buttonTheme.colorScheme?.primary,
+                        value: rememberMe,
+                        onChanged: (b) {
+                          setState(() {
+                            rememberMe = b!;
+                          });
+                        },
+                      ),
+                      const Text("Remember Me"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(0),
@@ -152,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: EdgeInsets.all(_elementPadding),
           child: ElevatedButton(
-            onPressed: loginUser,
+            onPressed: _loginUser,
             child: Padding(
               padding: EdgeInsets.all(_elementPadding),
               child: const Text("Log in"),
@@ -161,17 +207,5 @@ class _LoginPageState extends State<LoginPage> {
         )
       ],
     );
-  }
-
-  void loginUser() {
-    authCommand
-        .loginUser(context, _usernameController.text, _passwordController.text)
-        .onError((error, stackTrace) {
-      setState(() {
-        _errorMessage = "Invalid User";
-        ToastManager.show(context, _errorMessage);
-      });
-      return UserToken.empty();
-    });
   }
 }

@@ -1,16 +1,47 @@
 import 'dart:convert';
 
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:zolder_app/configuration/api_configuration.dart';
+import 'package:zolder_app/model/user/auth_token.dart';
 
 class APIController {
   static final APIController _instance = APIController._internal();
 
   factory APIController() => _instance;
 
-  APIController._internal();
-
   final Map<int, List<Function(String body)>> _onStatusCallbacks = {};
+
+  final GetIt getIt = GetIt.instance;
+
+  late final StompClient stompClient;
+
+  Function(StompFrame f)? onConnect;
+  Function()? onLoc;
+  Function()? onUser;
+  Function()? onBook;
+
+  APIController._internal() {
+    stompClient = StompClient(
+      config: StompConfig(
+        url: APIConfiguration.stompSocketUrl,
+        onConnect: _onConnect,
+        onDebugMessage: (s) {},
+        onWebSocketError: (dynamic error) => print(error.toString()),
+        stompConnectHeaders: <String, String>{
+          'authorization': getIt<AuthTokenModel>().authToken.token
+        },
+        webSocketConnectHeaders: {
+          'authorization': getIt<AuthTokenModel>().authToken.token
+        },
+      ),
+    );
+    stompClient.activate();
+  }
 
   addOnStatusCallback(int statusCode, Function(String body) callback) {
     if (_onStatusCallbacks[statusCode] == null) {
@@ -70,4 +101,81 @@ class APIController {
     }
     return false;
   }
+
+  void _onConnect(StompFrame frame) {
+    onConnect?.call(frame);
+    stompClient.subscribe(
+        destination: '/topic/user',
+        callback: (f) {
+          onUser?.call();
+        });
+    stompClient.subscribe(
+        destination: '/topic/book',
+        callback: (f) {
+          onBook?.call();
+        });
+    stompClient.subscribe(
+        destination: '/topic/location',
+        callback: (f) {
+          onLoc?.call();
+        });
+  }
+
+  void subscribe(String path, Function(StompFrame) callback) {
+    stompClient.subscribe(destination: path, callback: callback);
+  }
+
+  bool isActiveClient() {
+    return stompClient.isActive;
+  }
+
+  void dispose() {
+    stompClient.deactivate();
+  }
 }
+
+// void onConnect(StompFrame frame) {
+//   stompClient.subscribe(
+//     destination: "/topic/book",
+//     callback: (StompFrame frame) {
+//       print("Books Altered");
+//     },
+//   );
+//
+//   stompClient.subscribe(
+//     destination: "/topic/location",
+//     callback: (StompFrame frame) {
+//       print("Location Altered");
+//     },
+//   );
+//
+//   stompClient.subscribe(
+//     destination: "/topic/user",
+//     callback: (StompFrame frame) {
+//       print("User Altered");
+//     },
+//   );
+//   //
+//   // Timer.periodic(Duration(seconds: 1), (timer) {
+//   //   stompClient.send(destination: "/app/hello");
+//   //   print("Time");
+//   // });
+// }
+//
+// final stompClient = StompClient(
+//   config: StompConfig(
+//       url: "ws://localhost:7000/zolder/stomp",
+//       onConnect: onConnect,
+//       onDebugMessage: print,
+//       onWebSocketError: (dynamic error) => print(error.toString()),
+//       stompConnectHeaders: <String,String>{
+//         'authorization': "a6a50bda-afbc-486f-8b0b-a8d1180e910e"
+//       },
+//       webSocketConnectHeaders: {
+//         'authorization': "a6a50bda-afbc-486f-8b0b-a8d1180e910e"
+//       }),
+// );
+//
+// void connectToStomp() {
+//   stompClient.activate();
+// }

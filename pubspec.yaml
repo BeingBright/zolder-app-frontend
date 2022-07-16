@@ -43,6 +43,7 @@ dependencies:
   provider: ^5.0.0
   get_it: ^7.2.0
   stomp_dart_client: ^0.4.4
+  table_sticky_headers: ^2.0.1
 
 dev_dependencies:
   flutter_test:

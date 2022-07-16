@@ -17,7 +17,7 @@ class Location {
         columnCount = json['columnCount'],
         buildingLocation = json['buildingLocation'],
         inventoryLocation = json['inventoryLocation'],
-        books = booksFromJson(json['books']);
+        books = _booksFromJson(json['books']);
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -27,9 +27,15 @@ class Location {
         'inventoryLocation': inventoryLocation
       };
 
-  static List<Book> booksFromJson(List json) {
+  static List<Book> _booksFromJson(List json) {
     return List<Book>.from(json.map((e) {
       return Book.fromJson(e);
+    }));
+  }
+
+  static List<Location> generateList(List json) {
+    return List<Location>.from(json.map((e) {
+      return Location.fromJson(e);
     }));
   }
 
