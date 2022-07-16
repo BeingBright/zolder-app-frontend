@@ -36,8 +36,20 @@ class _UserViewState extends State<UserView> {
   }
 
   _onUpdateUser(User user) {
-    widget.getIt<UserService>().updateUser(user);
+    var updateUserModal = showDialog(
+      context: context,
+      builder: (context) => UserModal(
+        currentUser: user,
+        title: "Update User",
+      ),
+    );
+    updateUserModal.then((user) {
+      if (user != null) {
+        widget.getIt<UserService>().updateUser(user);
+      }
+    });
   }
+
 
   _onRefresh() async {
     var result = await widget.getIt<UserService>().getUsers();
