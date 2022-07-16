@@ -1,74 +1,82 @@
 import 'dart:io';
 
-import 'package:zolder_app/models/book.dart';
-import 'package:zolder_app/models/location.dart';
-
-import '../configuration/api_configuration.dart';
-import 'api_controller.dart';
-import 'auth_service.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/configuration/api_configuration.dart';
+import 'package:zolder_app/model/location.dart';
+import 'package:zolder_app/model/user/auth_token.dart';
+import 'package:zolder_app/services/api_controller.dart';
 
 class LocationService {
-  static final _instance = LocationService._newInstance();
-  final APIController controller = APIController();
-
-  LocationService._newInstance();
-
-  factory LocationService() => _instance;
-
-  Future<Location> getLocation(String buildingLoc, String inventoryLoc) async {
-    return Location.fromJson(await controller.get(
-      "${APIConfiguration.location}/location/$buildingLoc/$inventoryLoc",
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: AuthService().token.token
-      },
-    ));
-  }
+  GetIt getIt = GetIt.instance;
 
   Future<List<Location>> getLocations() async {
-    if (AuthService().token.token.isEmpty) return [];
-    return locationFromJson(await controller.get(
+    return Location.generateList(await getIt<APIController>().get(
       APIConfiguration.location,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: AuthService().token.token
+        HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
       },
     ));
   }
 
-  Future<List<Location>> getLocationsByBuilding(String buildingLoc) async {
-    if (AuthService().token.token.isEmpty) return [];
-    return locationFromJson(await controller.get(
+  Future<List<Location>> getLocationByBuilding(String buildingLoc) async {
+    return Location.generateList(await getIt<APIController>().get(
       "${APIConfiguration.location}/location/$buildingLoc",
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: AuthService().token.token
+        HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
+      },
+    ));
+  }
+
+  Future<Location> getLocationByBuildingAndInventory(
+      String buildingLoc, String inventoryLoc) async {
+    return Location.fromJson(await getIt<APIController>().get(
+      "${APIConfiguration.location}/location/$buildingLoc/$inventoryLoc",
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
+      },
+    ));
+  }
+
+  Future<Location> getLocationById(String id) async {
+    return Location.fromJson(await getIt<APIController>().get(
+      "${APIConfiguration.location}/$id",
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
       },
     ));
   }
 
   Future addLocation(Location location) async {
-    return await controller.post(APIConfiguration.location,
+    return await getIt<APIController>().post(APIConfiguration.location,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          HttpHeaders.authorizationHeader: AuthService().token.token,
+          HttpHeaders.authorizationHeader:
+              getIt<AuthTokenModel>().authToken.token,
         },
         body: location);
   }
 
-  List<Location> locationFromJson(List json) {
-    if (json.isEmpty) return [];
-    return List<Location>.from(json.map((e) {
-      return Location.fromJson(e);
-    }));
-  }
-
-  Future updateBook(Book book) async {
-    return await controller.put(APIConfiguration.book,
+  Future updateLocation(Location location) async {
+    return await getIt<APIController>().put(APIConfiguration.location,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          HttpHeaders.authorizationHeader: AuthService().token.token,
+          HttpHeaders.authorizationHeader:
+              getIt<AuthTokenModel>().authToken.token,
         },
-        body: book);
+        body: location);
+  }
+
+  Future removeLocation(Location location) async {
+    return await getIt<APIController>().delete(APIConfiguration.location,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader:
+              getIt<AuthTokenModel>().authToken.token,
+        },
+        body: location);
   }
 }

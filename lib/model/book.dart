@@ -10,6 +10,12 @@ class Book {
     return bookId.isEmpty;
   }
 
+  Book.empty()
+      : id = "",
+        bookId = "",
+        row = 0,
+        column = 0;
+
   Book.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         row = json['row'],
@@ -22,6 +28,12 @@ class Book {
         'column': column,
         'bookId': bookId,
       };
+
+  static List<Book> generateList(List json) {
+    return List<Book>.from(json.map((e) {
+      return Book.fromJson(e);
+    }));
+  }
 
   @override
   String toString() {

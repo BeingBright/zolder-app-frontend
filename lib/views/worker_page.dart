@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
-import 'package:zolder_app/models/user_token_model.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zolder_app/views/location_view.dart';
 
-import '../components/sidebar.dart';
-import 'location_view.dart';
+import '../model/user/auth_token.dart';
+import '../model/user/user.dart';
 
 class WorkerPage extends StatefulWidget {
   const WorkerPage({Key? key}) : super(key: key);
@@ -14,12 +14,13 @@ class WorkerPage extends StatefulWidget {
 }
 
 class _WorkerPageState extends State<WorkerPage> {
+  final GetIt getIt = GetIt.instance;
+
   @override
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (Provider.of<UserTokenModel>(context, listen: false).userToken.role !=
-          "WORKER") {
+      if (getIt<AuthTokenModel>().authToken.role != UserRole.worker) {
         Navigator.pushReplacementNamed(context, '/');
       }
     });
@@ -27,10 +28,6 @@ class _WorkerPageState extends State<WorkerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const LocationView(
-      sidebar: Sidebar(
-        children: [],
-      ),
-    );
+    return LocationView();
   }
 }

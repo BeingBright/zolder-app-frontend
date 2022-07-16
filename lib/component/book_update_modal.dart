@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zolder_app/models/book.dart';
+import 'package:zolder_app/model/book.dart';
 
 class BookUpdateModal extends StatelessWidget {
   BookUpdateModal({Key? key, required this.book}) : super(key: key);

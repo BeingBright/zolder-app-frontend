@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zolder_app/models/user.dart';
+import 'package:zolder_app/model/user/user.dart';
 
 class UserModal extends StatefulWidget {
   const UserModal({
@@ -20,17 +20,16 @@ class _UserModalState extends State<UserModal> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String _role = "WORKER";
-  final List<String> _roles = <String>['WORKER', 'OFFICE', 'ADMIN'];
+  UserRole _role = UserRole.none;
 
-  final _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     if (widget.currentUser != null) {
       _usernameController.text = widget.currentUser!.username!;
-      _role = widget.currentUser!.role!;
+      _role = widget.currentUser!.role;
     }
   }
 
@@ -41,7 +40,7 @@ class _UserModalState extends State<UserModal> {
         child: AlertDialog(
           title: Text(widget.title),
           content: Form(
-            key: _formkey,
+            key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -90,21 +89,28 @@ class _UserModalState extends State<UserModal> {
                       child: Text("Role:"),
                     ),
                     Expanded(
-                      child: DropdownButton(
-                          isExpanded: true,
-                          value: _role,
-                          items: _roles
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Center(child: Text(value)),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() {
-                              _role = value!;
-                            });
-                          }),
+                      child: DropdownButtonFormField(
+                        isExpanded: true,
+                        value: _role,
+                        items: UserRole.values
+                            .map<DropdownMenuItem<UserRole>>((UserRole value) {
+                          return DropdownMenuItem<UserRole>(
+                            value: value,
+                            child: Center(child: Text(value.name)),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _role = value as UserRole;
+                          });
+                        },
+                        validator: (value) {
+                          if ((value as UserRole) == UserRole.none) {
+                            return "role can not be none";
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                   ],
                 )
@@ -119,7 +125,7 @@ class _UserModalState extends State<UserModal> {
                 child: const Text("Cancel")),
             TextButton(
               onPressed: () {
-                if (_formkey.currentState!.validate()) {
+                if (_formKey.currentState!.validate()) {
                   Navigator.of(context, rootNavigator: true).pop(
                     User(
                       (widget.currentUser != null)

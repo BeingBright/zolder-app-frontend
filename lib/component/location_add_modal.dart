@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zolder_app/models/location.dart';
+import 'package:zolder_app/model/location.dart';
 
-class LocationModal extends StatelessWidget {
-  LocationModal({Key? key}) : super(key: key);
+class LocationAddModal extends StatelessWidget {
+  LocationAddModal({Key? key}) : super(key: key);
 
   final TextEditingController _rowController = TextEditingController();
   final TextEditingController _columnController = TextEditingController();

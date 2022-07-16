@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../models/user.dart';
+import 'package:zolder_app/model/user/user.dart';
 
 class UserCard extends StatelessWidget {
   const UserCard(
@@ -30,10 +29,6 @@ class UserCard extends StatelessWidget {
             style: theme.textTheme.headline4?.copyWith(color: Colors.white),
             overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            user.role!,
-            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -49,6 +44,11 @@ class UserCard extends StatelessWidget {
                   ),
                   // color: theme.errorColor,
                 ),
+              ),
+              Text(
+                user.role.name,
+                style:
+                    theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -1,30 +1,50 @@
+enum UserRole {
+  admin,
+  worker,
+  office,
+  none,
+}
+
 class User {
   String? id;
   String? username;
   String? password;
-  String? role;
+  UserRole role = UserRole.none;
   bool isActive = true;
 
+  bool rememberMe = false;
+
   User(this.id, this.username, this.password, this.role, this.isActive);
+
+  User.login(this.username, this.password, this.rememberMe);
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         username = json['username'],
         password = json['password'],
-        role = json['role'],
-        isActive = json['active'];
+        role = UserRole.values
+            .firstWhere((e) => e.name.toString().toUpperCase() == json['role']),
+        isActive = json['active'],
+        rememberMe = json['rememberMe'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': username,
         'password': password,
-        'role': role,
-        'active': isActive
+        'role': role.name.toUpperCase(),
+        'active': isActive,
+        'rememberMe': rememberMe
       };
+
+  static List<User> generateList(List json) {
+    return List<User>.from(json.map((e) {
+      return User.fromJson(e);
+    }));
+  }
 
   @override
   String toString() {
-    return 'User{id: $id, username: $username, password: $password, type: $role}';
+    return 'User{id: $id, username: $username, password: $password, role: $role, isActive: $isActive, rememberMe: $rememberMe}';
   }
 
   @override

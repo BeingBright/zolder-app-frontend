@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SidebarTile extends StatelessWidget {
-  const SidebarTile(
+class SidebarItem extends StatelessWidget {
+  const SidebarItem(
       {Key? key,
-      required this.title,
-      required this.icons,
-      required this.callback})
+        required this.title,
+        required this.icons,
+        required this.callback})
       : super(key: key);
 
   final String title;
