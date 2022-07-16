@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:get_it/get_it.dart';
@@ -36,7 +37,10 @@ class AuthService {
   Future<AuthToken> logout() async {
     await getIt<APIController>().post(
       '${APIConfiguration.auth}/logout',
-      headers: APIConfiguration.baseHeader,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
+      },
     );
     AuthTokenModel tm = getIt<AuthTokenModel>();
     clearToken();

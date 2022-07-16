@@ -50,7 +50,9 @@ class _LoginPageState extends State<LoginPage> {
       _loadPage(value);
     });
     t.onError((error, stackTrace) {
-      _errorMessage = "";
+      setState(() {
+        _errorMessage = "Invalid User";
+      });
       return AuthToken.empty();
     });
   }
@@ -159,7 +161,6 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Password",
                     ),
                     onEditingComplete: _loginUser,
-
                   ),
                 ),
                 Padding(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:zolder_app/model/location_model.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
+import 'package:zolder_app/model/user/user_model.dart';
 import 'package:zolder_app/services/api_controller.dart';
 import 'package:zolder_app/services/audit_service.dart';
 import 'package:zolder_app/services/auth_service.dart';
@@ -16,14 +17,6 @@ import 'package:zolder_app/views/worker_page.dart';
 void main() {
   _setupGetIt();
   runApp(
-    // MultiProvider(
-    //   providers: const [
-    // ChangeNotifierProvider(create: (context) => UserTokenModel()),
-    // ChangeNotifierProvider(create: (context) => UserModel()),
-    // ChangeNotifierProvider(create: (context) => LocationModel())
-    // ],
-    // child: const HomePage(),
-    // ),
     const HomePage(),
   );
 }
@@ -33,9 +26,9 @@ void _setupGetIt() {
   // Models
   getIt.registerSingleton<AuthTokenModel>(AuthTokenModel());
   getIt.registerSingleton<LocationModel>(LocationModel());
+  getIt.registerSingleton<UserModel>(UserModel());
   // Services
   getIt.registerSingleton<APIController>(APIController());
-
   getIt.registerSingleton<AuthService>(AuthService());
   getIt.registerSingleton<UserService>(UserService());
   getIt.registerSingleton<LocationService>(LocationService());

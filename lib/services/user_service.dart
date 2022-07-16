@@ -19,9 +19,9 @@ class UserService {
     ));
   }
 
-  Future<User> getUser() async {
+  Future<User> getUser(String username) async {
     return User.fromJson(await getIt<APIController>().get(
-      APIConfiguration.user,
+      "${APIConfiguration.user}/$username",
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:zolder_app/model/location.dart';
 
 class LocationModel extends ChangeNotifier {

@@ -16,7 +16,7 @@ class AuthToken {
         role = UserRole.values
             .firstWhere((e) => e.toString().toUpperCase().contains(json['role']));
 
-  bool isEmpty() => token == "" && user == "" && role == "";
+  bool isEmpty() => token == "" && user == "" && role == UserRole.none;
 
   Map<String, dynamic> toJson() => {
         'token': token,

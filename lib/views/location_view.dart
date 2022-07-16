@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:zolder_app/component/book_table.dart';
+import 'package:zolder_app/component/location_add_modal.dart';
+import 'package:zolder_app/component/sidebar.dart';
 import 'package:zolder_app/model/location_model.dart';
 import 'package:zolder_app/model/user/auth_token.dart';
 import 'package:zolder_app/model/user/user.dart';
@@ -8,20 +10,33 @@ import 'package:zolder_app/services/api_controller.dart';
 import 'package:zolder_app/services/location_service.dart';
 
 class LocationView extends StatefulWidget {
-  const LocationView({Key? key}) : super(key: key);
+  LocationView({Key? key, this.children}) : super(key: key);
+
+  final List<Widget>? children;
+
+  final GetIt getIt = GetIt.instance;
 
   @override
   State<LocationView> createState() => _LocationViewState();
 }
 
 class _LocationViewState extends State<LocationView> {
-  GetIt getIt = GetIt.instance;
-
   void _onRefresh() {
     _getLocation();
   }
 
-  void _onAddLocation() {}
+  void _onAddLocation() {
+    var addLocationModal = showDialog(
+      context: context,
+      builder: (context) => LocationAddModal(),
+    );
+
+    addLocationModal.then((loc) {
+      if (loc == null) return;
+      Future result = widget.getIt<LocationService>().addLocation(loc);
+      result.onError((error, stackTrace) => {});
+    });
+  }
 
   void _onRemoveLocation() {}
 
@@ -30,28 +45,29 @@ class _LocationViewState extends State<LocationView> {
   void _onSearch() {}
 
   void _getLocation() async {
-    var locFut = await getIt<LocationService>().getLocations();
+    var locFut = await widget.getIt<LocationService>().getLocations();
     setState(() {
-      getIt<LocationModel>().setLocations(locFut);
+      widget.getIt<LocationModel>().setLocations(locFut);
     });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     _getLocation();
-    getIt<APIController>().onLoc = _getLocation;
-    getIt<APIController>().onBook = _getLocation;
+    widget.getIt<APIController>().onLoc = _getLocation;
+    widget.getIt<APIController>().onBook = _getLocation;
+    widget.getIt<APIController>().onUser = null;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: getIt<LocationModel>().locations.length,
+      length: widget.getIt<LocationModel>().locations.length,
       child: Scaffold(
+        drawer: Sidebar(children: widget.children),
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
           title: const Text("Location"),
           actions: [
             IconButton(
@@ -62,7 +78,7 @@ class _LocationViewState extends State<LocationView> {
               onPressed: _onSearch,
               icon: const Icon(Icons.search),
             ),
-            if (getIt<AuthTokenModel>().authToken.role == UserRole.admin)
+            if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.admin)
               PopupMenuButton(
                 onSelected: (choise) {
                   switch (choise) {
@@ -104,13 +120,14 @@ class _LocationViewState extends State<LocationView> {
                 ],
               ),
           ],
-          bottom: (getIt<LocationModel>().locations.isEmpty)
+          bottom: (widget.getIt<LocationModel>().locations.isEmpty)
               ? null
               : TabBar(
-                  tabs: getIt<LocationModel>()
+                  tabs: widget
+                      .getIt<LocationModel>()
                       .locations
                       .map((e) => Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: Text(e.inventoryLocation ?? ""),
                           ))
                       .toList(),
@@ -118,7 +135,8 @@ class _LocationViewState extends State<LocationView> {
         ),
         body: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
-            children: getIt<LocationModel>()
+            children: widget
+                .getIt<LocationModel>()
                 .locations
                 .map((e) => BookTable(location: e))
                 .toList()),

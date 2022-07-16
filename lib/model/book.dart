@@ -10,6 +10,12 @@ class Book {
     return bookId.isEmpty;
   }
 
+  Book.empty()
+      : id = "",
+        bookId = "",
+        row = 0,
+        column = 0;
+
   Book.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         row = json['row'],
