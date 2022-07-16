@@ -33,7 +33,7 @@ class UserCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(4.0, 4.0, 0, 4.0),
                 child: IconButton(
                   onPressed: () {
                     onUpdate(user);
@@ -49,9 +49,10 @@ class UserCard extends StatelessWidget {
                 user.role.name,
                 style:
                     theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
+                overflow: TextOverflow.clip,
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(0, 4.0, 4.0, 4.0),
                 child: IconButton(
                     onPressed: () {
                       onDelete(user);
