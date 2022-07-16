@@ -12,14 +12,6 @@ import 'package:zolder_app/services/api_controller.dart';
 class AuthService {
   GetIt getIt = GetIt.instance;
 
-  late final SharedPreferences sharedPrefs;
-
-  AuthService() {
-    SharedPreferences.getInstance().then((value) {
-      sharedPrefs = value;
-    });
-  }
-
   Future<AuthToken> login(
       String username, String password, bool remember) async {
     var token = AuthToken.fromJson(
@@ -49,6 +41,7 @@ class AuthService {
   }
 
   Future<AuthToken> loadToken() async {
+    var sharedPrefs = await SharedPreferences.getInstance();
     if (sharedPrefs.getBool('saved') == null ||
         sharedPrefs.getBool('saved') == false) {
       return AuthToken.empty();
@@ -67,6 +60,8 @@ class AuthService {
   }
 
   Future saveToken(AuthToken token) async {
+    var sharedPrefs = await SharedPreferences.getInstance();
+
     await clearToken();
     sharedPrefs.setBool('saved', true);
     sharedPrefs.setString('token', token.token);
@@ -75,6 +70,8 @@ class AuthService {
   }
 
   Future clearToken() async {
+    var sharedPrefs = await SharedPreferences.getInstance();
+
     sharedPrefs.setBool('saved', false);
     sharedPrefs.setString('token', '');
     sharedPrefs.setString('user', '');

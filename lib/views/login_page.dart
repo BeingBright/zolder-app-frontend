@@ -63,10 +63,13 @@ class _LoginPageState extends State<LoginPage> {
     _mainPadding = (widget.mainPadding) ?? _mainPadding;
     _elementPadding = (widget.elementPadding) ?? _elementPadding;
     _elementSize = (widget.elementSize) ?? _elementSize;
-    getIt<AuthService>().loadToken().then((value) => _loadPage(value));
     getIt<APIController>().addOnStatusCallback(401, (body) {
       getIt<AuthService>().clearToken();
       Navigator.pushReplacementNamed(HomePage.globalKey.currentContext!, '/');
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print("object");
+      getIt<AuthService>().loadToken().then((value) => _loadPage(value));
     });
   }
 
