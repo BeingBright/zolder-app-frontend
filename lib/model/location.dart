@@ -56,4 +56,6 @@ class Location {
   @override
   int get hashCode =>
       id.hashCode ^ buildingLocation.hashCode ^ inventoryLocation.hashCode;
+
+  Location.empty();
 }

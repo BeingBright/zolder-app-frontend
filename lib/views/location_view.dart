@@ -21,6 +21,10 @@ class LocationView extends StatefulWidget {
 }
 
 class _LocationViewState extends State<LocationView> {
+  String searchTerm = "";
+
+  bool openSearch = false;
+
   void _onRefresh() {
     _getLocation();
   }
@@ -42,7 +46,11 @@ class _LocationViewState extends State<LocationView> {
 
   void _onUpdateLocation() {}
 
-  void _onSearch() {}
+  void _onSearch(String term) {
+    setState(() {
+      searchTerm = term;
+    });
+  }
 
   void _getLocation() async {
     var locFut = await widget.getIt<LocationService>().getLocations();
@@ -67,58 +75,78 @@ class _LocationViewState extends State<LocationView> {
       child: Scaffold(
         drawer: Sidebar(children: widget.children),
         appBar: AppBar(
+          centerTitle: true,
           automaticallyImplyLeading: true,
-          title: const Text("Location"),
+          title: (!openSearch)
+              ? const Text("Location")
+              : Center(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      label: Text("Book ID"),
+                    ),
+                    onChanged: _onSearch,
+                  ),
+                ),
           actions: [
             IconButton(
-              onPressed: _onRefresh,
-              icon: const Icon(Icons.refresh),
-            ),
-            IconButton(
-              onPressed: _onSearch,
+              onPressed: () {
+                setState(() {
+                  openSearch = !openSearch;
+                  if (!openSearch) {
+                    searchTerm = "";
+                  }
+                });
+              },
               icon: const Icon(Icons.search),
             ),
-            if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.admin)
-              PopupMenuButton(
-                onSelected: (choise) {
-                  switch (choise) {
-                    case 'Add':
-                      _onAddLocation();
-                      break;
-                    case 'Update':
-                      _onUpdateLocation();
-                      break;
-                    case 'Remove':
-                      _onRemoveLocation();
-                      break;
-                    default:
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: "Add",
-                    child: ListTile(
-                      title: Text("Add Location"),
-                      leading: Icon(Icons.add),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: "Update",
-                    child: ListTile(
-                      title: Text("Update Location"),
-                      leading: Icon(Icons.mode),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: "Remove",
-                    child: ListTile(
-                      title: Text("Remove Location"),
-                      leading: Icon(Icons.delete),
-                    ),
-                  )
-                ],
+            if (!openSearch)
+              IconButton(
+                onPressed: _onRefresh,
+                icon: const Icon(Icons.refresh),
               ),
+            if (!openSearch)
+              if (widget.getIt<AuthTokenModel>().authToken.role ==
+                  UserRole.admin)
+                PopupMenuButton(
+                  onSelected: (choise) {
+                    switch (choise) {
+                      case 'Add':
+                        _onAddLocation();
+                        break;
+                      case 'Update':
+                        _onUpdateLocation();
+                        break;
+                      case 'Remove':
+                        _onRemoveLocation();
+                        break;
+                      default:
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: "Add",
+                      child: ListTile(
+                        title: Text("Add Location"),
+                        leading: Icon(Icons.add),
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: "Update",
+                      child: ListTile(
+                        title: Text("Update Location"),
+                        leading: Icon(Icons.mode),
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: "Remove",
+                      child: ListTile(
+                        title: Text("Remove Location"),
+                        leading: Icon(Icons.delete),
+                      ),
+                    )
+                  ],
+                ),
           ],
           bottom: (widget.getIt<LocationModel>().locations.isEmpty)
               ? null
@@ -138,7 +166,10 @@ class _LocationViewState extends State<LocationView> {
             children: widget
                 .getIt<LocationModel>()
                 .locations
-                .map((e) => BookTable(location: e))
+                .map((e) => BookTable(
+                      location: e,
+                      searchTerm: searchTerm,
+                    ))
                 .toList()),
       ),
     );

@@ -68,7 +68,6 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacementNamed(HomePage.globalKey.currentContext!, '/');
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      print("object");
       getIt<AuthService>().loadToken().then((value) => _loadPage(value));
     });
   }
