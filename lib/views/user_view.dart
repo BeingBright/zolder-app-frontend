@@ -50,7 +50,6 @@ class _UserViewState extends State<UserView> {
     });
   }
 
-
   _onRefresh() async {
     var result = await widget.getIt<UserService>().getUsers();
     setState(() {
@@ -72,6 +71,7 @@ class _UserViewState extends State<UserView> {
     return Scaffold(
       drawer: Sidebar(children: widget.children),
       appBar: AppBar(
+        centerTitle: true,
         automaticallyImplyLeading: true,
         title: const Text("User"),
         actions: [

@@ -10,13 +10,16 @@ import 'package:zolder_app/model/user/user.dart';
 import 'package:zolder_app/services/book_service.dart';
 
 class BookTable extends StatefulWidget {
-  BookTable({Key? key, required this.location}) : super(key: key) {
+  BookTable({Key? key, required this.location, this.searchTerm})
+      : super(key: key) {
     books = generateList(location);
   }
 
   final GetIt getIt = GetIt.instance;
 
   final Location location;
+
+  String? searchTerm = "";
 
   late final List<List<Book?>> books;
 
@@ -72,8 +75,11 @@ class _BookTableState extends State<BookTable> {
             stickyColumnAlignment: Alignment.center,
             stickyRowAlignment: Alignment.center,
             stickyLegendAlignment: Alignment.center),
-        contentCellBuilder: (i, j) =>
-            BookItem(bookId: widget.books[i][j]!.bookId),
+        contentCellBuilder: (i, j) => BookItem(
+            bookId: widget.books[i][j]!.bookId,
+            highlight:
+                widget.books[i][j]!.bookId.replaceAll(".", "").contains(widget.searchTerm ?? "") &&
+                    (widget.searchTerm ?? "").isNotEmpty),
         onContentCellPressed: _onCellPressed,
         scrollPhysics: CustomScrollPhysics(
           contentHorizontal: const BouncingScrollPhysics(),

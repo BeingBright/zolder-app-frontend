@@ -10,34 +10,40 @@ class LocationService {
   GetIt getIt = GetIt.instance;
 
   Future<List<Location>> getLocations() async {
-    return Location.generateList(await getIt<APIController>().get(
+    var json = await getIt<APIController>().get(
       APIConfiguration.location,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
       },
-    ));
+    );
+    if (json == null) return List.empty(growable: false);
+    return Location.generateList(json);
   }
 
   Future<List<Location>> getLocationByBuilding(String buildingLoc) async {
-    return Location.generateList(await getIt<APIController>().get(
+    var json = await getIt<APIController>().get(
       "${APIConfiguration.location}/location/$buildingLoc",
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
       },
-    ));
+    );
+    if (json == null) return List.empty(growable: false);
+    return Location.generateList(json);
   }
 
   Future<Location> getLocationByBuildingAndInventory(
       String buildingLoc, String inventoryLoc) async {
-    return Location.fromJson(await getIt<APIController>().get(
+    var json = await getIt<APIController>().get(
       "${APIConfiguration.location}/location/$buildingLoc/$inventoryLoc",
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: getIt<AuthTokenModel>().authToken.token
       },
-    ));
+    );
+    if (json == null) return Location.empty();
+    return Location.fromJson(json);
   }
 
   Future<Location> getLocationById(String id) async {

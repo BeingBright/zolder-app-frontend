@@ -21,6 +21,8 @@ class LocationView extends StatefulWidget {
 }
 
 class _LocationViewState extends State<LocationView> {
+  String searchTerm = "";
+
   void _onRefresh() {
     _getLocation();
   }
@@ -42,7 +44,11 @@ class _LocationViewState extends State<LocationView> {
 
   void _onUpdateLocation() {}
 
-  void _onSearch() {}
+  void _onSearch(String term) {
+    setState(() {
+      searchTerm = term;
+    });
+  }
 
   void _getLocation() async {
     var locFut = await widget.getIt<LocationService>().getLocations();
@@ -67,16 +73,25 @@ class _LocationViewState extends State<LocationView> {
       child: Scaffold(
         drawer: Sidebar(children: widget.children),
         appBar: AppBar(
+          centerTitle: true,
           automaticallyImplyLeading: true,
           title: const Text("Location"),
           actions: [
+            Container(
+              constraints: BoxConstraints(maxWidth: 250),
+              child: TextFormField(
+                onChanged: _onSearch,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                _onSearch("13.44");
+              },
+              icon: const Icon(Icons.search),
+            ),
             IconButton(
               onPressed: _onRefresh,
               icon: const Icon(Icons.refresh),
-            ),
-            IconButton(
-              onPressed: _onSearch,
-              icon: const Icon(Icons.search),
             ),
             if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.admin)
               PopupMenuButton(
@@ -138,7 +153,10 @@ class _LocationViewState extends State<LocationView> {
             children: widget
                 .getIt<LocationModel>()
                 .locations
-                .map((e) => BookTable(location: e))
+                .map((e) => BookTable(
+                      location: e,
+                      searchTerm: searchTerm,
+                    ))
                 .toList()),
       ),
     );
