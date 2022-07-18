@@ -23,6 +23,8 @@ class LocationView extends StatefulWidget {
 class _LocationViewState extends State<LocationView> {
   String searchTerm = "";
 
+  bool openSearch = false;
+
   void _onRefresh() {
     _getLocation();
   }
@@ -75,17 +77,26 @@ class _LocationViewState extends State<LocationView> {
         appBar: AppBar(
           centerTitle: true,
           automaticallyImplyLeading: true,
-          title: const Text("Location"),
+          title: (!openSearch) ? const Text("Location") : null,
           actions: [
-            Container(
-              constraints: BoxConstraints(maxWidth: 250),
-              child: TextFormField(
-                onChanged: _onSearch,
+            if (openSearch)
+              Container(
+                constraints: const BoxConstraints(maxWidth: 250),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    label: Text("Book ID"),
+                  ),
+                  onChanged: _onSearch,
+                ),
               ),
-            ),
             IconButton(
               onPressed: () {
-                _onSearch("13.44");
+                setState(() {
+                  openSearch = !openSearch;
+                  if (!openSearch) {
+                    searchTerm = "";
+                  }
+                });
               },
               icon: const Icon(Icons.search),
             ),
