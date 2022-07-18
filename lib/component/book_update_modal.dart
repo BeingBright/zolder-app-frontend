@@ -6,7 +6,7 @@ class BookUpdateModal extends StatelessWidget {
   BookUpdateModal({Key? key, required this.book}) : super(key: key);
 
   final RegExp bookIDRegexNoPoint = RegExp("([0-9]{6})");
-  
+
   final Book book;
   final TextEditingController _bookIdController = TextEditingController();
 
@@ -35,7 +35,6 @@ class BookUpdateModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _bookIdController.text = book.bookId;
-
     return Center(
       child: SingleChildScrollView(
         child: AlertDialog(
@@ -52,6 +51,9 @@ class BookUpdateModal extends StatelessWidget {
                 _onClear(context);
               },
               child: const Text("Clear"),
+              style: TextButton.styleFrom(
+                primary: Colors.red,
+              ),
             ),
             TextButton(
               onPressed: () {
