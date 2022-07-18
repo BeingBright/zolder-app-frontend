@@ -77,18 +77,17 @@ class _LocationViewState extends State<LocationView> {
         appBar: AppBar(
           centerTitle: true,
           automaticallyImplyLeading: true,
-          title: (!openSearch) ? const Text("Location") : null,
-          actions: [
-            if (openSearch)
-              Container(
-                constraints: const BoxConstraints(maxWidth: 250),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    label: Text("Book ID"),
+          title: (!openSearch)
+              ? const Text("Location")
+              : Center(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      label: Text("Book ID"),
+                    ),
+                    onChanged: _onSearch,
                   ),
-                  onChanged: _onSearch,
                 ),
-              ),
+          actions: [
             IconButton(
               onPressed: () {
                 setState(() {
@@ -100,51 +99,54 @@ class _LocationViewState extends State<LocationView> {
               },
               icon: const Icon(Icons.search),
             ),
-            IconButton(
-              onPressed: _onRefresh,
-              icon: const Icon(Icons.refresh),
-            ),
-            if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.admin)
-              PopupMenuButton(
-                onSelected: (choise) {
-                  switch (choise) {
-                    case 'Add':
-                      _onAddLocation();
-                      break;
-                    case 'Update':
-                      _onUpdateLocation();
-                      break;
-                    case 'Remove':
-                      _onRemoveLocation();
-                      break;
-                    default:
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: "Add",
-                    child: ListTile(
-                      title: Text("Add Location"),
-                      leading: Icon(Icons.add),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: "Update",
-                    child: ListTile(
-                      title: Text("Update Location"),
-                      leading: Icon(Icons.mode),
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: "Remove",
-                    child: ListTile(
-                      title: Text("Remove Location"),
-                      leading: Icon(Icons.delete),
-                    ),
-                  )
-                ],
+            if (!openSearch)
+              IconButton(
+                onPressed: _onRefresh,
+                icon: const Icon(Icons.refresh),
               ),
+            if (!openSearch)
+              if (widget.getIt<AuthTokenModel>().authToken.role ==
+                  UserRole.admin)
+                PopupMenuButton(
+                  onSelected: (choise) {
+                    switch (choise) {
+                      case 'Add':
+                        _onAddLocation();
+                        break;
+                      case 'Update':
+                        _onUpdateLocation();
+                        break;
+                      case 'Remove':
+                        _onRemoveLocation();
+                        break;
+                      default:
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: "Add",
+                      child: ListTile(
+                        title: Text("Add Location"),
+                        leading: Icon(Icons.add),
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: "Update",
+                      child: ListTile(
+                        title: Text("Update Location"),
+                        leading: Icon(Icons.mode),
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: "Remove",
+                      child: ListTile(
+                        title: Text("Remove Location"),
+                        leading: Icon(Icons.delete),
+                      ),
+                    )
+                  ],
+                ),
           ],
           bottom: (widget.getIt<LocationModel>().locations.isEmpty)
               ? null
