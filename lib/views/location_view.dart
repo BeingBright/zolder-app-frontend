@@ -81,6 +81,7 @@ class _LocationViewState extends State<LocationView> {
               ? const Text("Location")
               : Center(
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       label: Text("Book ID"),
                     ),
