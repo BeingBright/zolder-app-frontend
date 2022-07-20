@@ -63,8 +63,8 @@ class _BookTableState extends State<BookTable> {
         key: UniqueKey(),
         columnsLength: widget.location.rowCount!,
         rowsLength: widget.location.columnCount!,
-        columnsTitleBuilder: (i) => Text("Rij $i"),
-        rowsTitleBuilder: (i) => Text("$i"),
+        columnsTitleBuilder: (i) => Text("Rij ${i+1}"),
+        rowsTitleBuilder: (i) => Text("${i+1}"),
         cellDimensions: const CellDimensions.fixed(
             contentCellWidth: 92.5,
             contentCellHeight: 38,
