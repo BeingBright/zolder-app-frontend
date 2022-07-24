@@ -125,13 +125,15 @@ class _LocationViewState extends State<LocationView> {
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: "Add",
-                      child: ListTile(
-                        title: Text("Add Location"),
-                        leading: Icon(Icons.add),
+                    if (widget.getIt<AuthTokenModel>().authToken.role ==
+                        UserRole.admin)
+                      const PopupMenuItem(
+                        value: "Add",
+                        child: ListTile(
+                          title: Text("Add Location"),
+                          leading: Icon(Icons.add),
+                        ),
                       ),
-                    ),
                     const PopupMenuItem(
                       value: "Update",
                       child: ListTile(
@@ -139,13 +141,15 @@ class _LocationViewState extends State<LocationView> {
                         leading: Icon(Icons.mode),
                       ),
                     ),
-                    const PopupMenuItem(
-                      value: "Remove",
-                      child: ListTile(
-                        title: Text("Remove Location"),
-                        leading: Icon(Icons.delete),
-                      ),
-                    )
+                    if (widget.getIt<AuthTokenModel>().authToken.role ==
+                        UserRole.admin)
+                      const PopupMenuItem(
+                        value: "Remove",
+                        child: ListTile(
+                          title: Text("Remove Location"),
+                          leading: Icon(Icons.delete),
+                        ),
+                      )
                   ],
                 ),
           ],
