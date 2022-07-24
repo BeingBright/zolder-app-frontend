@@ -37,10 +37,8 @@ class BookTable extends StatefulWidget {
 }
 
 class _BookTableState extends State<BookTable> {
-
   double _scrollOffsetX = 0.0;
   double _scrollOffsetY = 0.0;
-
 
   void _onCellPressed(int i, int j) {
     if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.office) {
@@ -74,8 +72,8 @@ class _BookTableState extends State<BookTable> {
         key: UniqueKey(),
         columnsLength: widget.location.rowCount!,
         rowsLength: widget.location.columnCount!,
-        columnsTitleBuilder: (i) => Text("Rij ${i+1}"),
-        rowsTitleBuilder: (i) => Text("${i+1}"),
+        columnsTitleBuilder: (i) => Text("Rij ${i + 1}"),
+        rowsTitleBuilder: (i) => Text("${i + 1}"),
         cellDimensions: const CellDimensions.fixed(
             contentCellWidth: 92.5,
             contentCellHeight: 38,
@@ -88,9 +86,10 @@ class _BookTableState extends State<BookTable> {
             stickyLegendAlignment: Alignment.center),
         contentCellBuilder: (i, j) => BookItem(
             bookId: widget.books[i][j]!.bookId,
-            highlight:
-                widget.books[i][j]!.bookId.replaceAll(".", "").contains(widget.searchTerm ?? "") &&
-                    (widget.searchTerm ?? "").isNotEmpty),
+            highlight: widget.books[i][j]!.bookId
+                    .replaceAll(".", "")
+                    .contains(widget.searchTerm ?? "") &&
+                (widget.searchTerm ?? "").isNotEmpty),
         onContentCellPressed: _onCellPressed,
         scrollPhysics: CustomScrollPhysics(
           contentHorizontal: const BouncingScrollPhysics(),
