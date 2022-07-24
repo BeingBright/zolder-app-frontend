@@ -37,6 +37,11 @@ class BookTable extends StatefulWidget {
 }
 
 class _BookTableState extends State<BookTable> {
+
+  double _scrollOffsetX = 0.0;
+  double _scrollOffsetY = 0.0;
+
+
   void _onCellPressed(int i, int j) {
     if (widget.getIt<AuthTokenModel>().authToken.role == UserRole.office) {
       return;
@@ -60,6 +65,12 @@ class _BookTableState extends State<BookTable> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: StickyHeadersTable(
+        initialScrollOffsetX: _scrollOffsetX,
+        initialScrollOffsetY: _scrollOffsetY,
+        onEndScrolling: (scrollOffsetX, scrollOffsetY) {
+          _scrollOffsetX = scrollOffsetX;
+          _scrollOffsetY = scrollOffsetY;
+        },
         key: UniqueKey(),
         columnsLength: widget.location.rowCount!,
         rowsLength: widget.location.columnCount!,
