@@ -1,5 +1,5 @@
 class APIConfiguration {
-  static const String restApiUrl = "http://brightonvandenend.nl:8050/zolder";
+  static const String restApiUrl = "http://brightonvandenend.nl:8080/zolder";
   // static const String restApiUrl = "http://localhost:7000/zolder";
   static const String user = "$restApiUrl/user";
   static const String location = "$restApiUrl/location";
@@ -8,7 +8,7 @@ class APIConfiguration {
   static const String book = "$restApiUrl/book";
 
   static const String stompSocketUrl =
-      "ws://brightonvandenend.nl:8050/zolder/stomp";
+      "ws://brightonvandenend.nl:8080/zolder/stomp";
   // static const String stompSocketUrl = "ws://localhost:7000/zolder/stomp";
 
   static Map<String, String> baseHeader = <String, String>{
